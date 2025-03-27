@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <map>
 #include <fstream>
 #include <string>
 
@@ -88,6 +89,17 @@ namespace leksanalyz {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn5;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn6;
 	private: System::Windows::Forms::Label^ label5;
+	private: System::Windows::Forms::DataGridView^ op_sign;
+
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn7;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn8;
+	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn9;
+	private: System::Windows::Forms::Label^ label6;
+
+
+
+
+
 
 
 
@@ -126,9 +138,15 @@ namespace leksanalyz {
 			this->dataGridViewTextBoxColumn5 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn6 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label5 = (gcnew System::Windows::Forms::Label());
+			this->op_sign = (gcnew System::Windows::Forms::DataGridView());
+			this->dataGridViewTextBoxColumn7 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn8 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->dataGridViewTextBoxColumn9 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->label6 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->op_sign))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// input_box
@@ -332,11 +350,59 @@ namespace leksanalyz {
 			this->label5->TabIndex = 12;
 			this->label5->Text = L"CONSTANTS";
 			// 
+			// op_sign
+			// 
+			this->op_sign->AllowUserToAddRows = false;
+			this->op_sign->AllowUserToDeleteRows = false;
+			this->op_sign->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->op_sign->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+				this->dataGridViewTextBoxColumn7,
+					this->dataGridViewTextBoxColumn8, this->dataGridViewTextBoxColumn9
+			});
+			this->op_sign->Location = System::Drawing::Point(42, 477);
+			this->op_sign->Name = L"op_sign";
+			this->op_sign->ReadOnly = true;
+			this->op_sign->Size = System::Drawing::Size(275, 150);
+			this->op_sign->TabIndex = 13;
+			// 
+			// dataGridViewTextBoxColumn7
+			// 
+			this->dataGridViewTextBoxColumn7->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn7->Name = L"dataGridViewTextBoxColumn7";
+			this->dataGridViewTextBoxColumn7->ReadOnly = true;
+			this->dataGridViewTextBoxColumn7->Width = 30;
+			// 
+			// dataGridViewTextBoxColumn8
+			// 
+			this->dataGridViewTextBoxColumn8->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn8->Name = L"dataGridViewTextBoxColumn8";
+			this->dataGridViewTextBoxColumn8->ReadOnly = true;
+			// 
+			// dataGridViewTextBoxColumn9
+			// 
+			this->dataGridViewTextBoxColumn9->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn9->Name = L"dataGridViewTextBoxColumn9";
+			this->dataGridViewTextBoxColumn9->ReadOnly = true;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label6->Location = System::Drawing::Point(99, 454);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(146, 20);
+			this->label6->TabIndex = 14;
+			this->label6->Text = L"OPERATION SIGN";
+			this->label6->Click += gcnew System::EventHandler(this, &MyForm::label6_Click);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(934, 588);
+			this->ClientSize = System::Drawing::Size(934, 669);
+			this->Controls->Add(this->label6);
+			this->Controls->Add(this->op_sign);
 			this->Controls->Add(this->label5);
 			this->Controls->Add(this->constants);
 			this->Controls->Add(this->label4);
@@ -355,6 +421,7 @@ namespace leksanalyz {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers))->EndInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->op_sign))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -452,24 +519,33 @@ namespace leksanalyz {
 
 	}
 	
-	
+	//лексический анализ
+
 private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	std::map<std::string, std::string> map_keywords;//словарь с ключевыми словами
+	std::map<std::string, std::string> map_identifiers;//словарь с идентификаторами
+	std::map<std::string, std::string> map_constants;//словарь с константами
+	std::map<std::string, std::string> map_op_sign;//словарь со знаками операций
+
+
+
 	//чистка таблиц
 	clear_table();
 
 
-	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");
+	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
 	String^ code = source_code_file->ReadToEnd();
 	
-	enum state {begin, identifier, constant, error} st;
+	enum state {begin, identifier, constant, op_sign, error} st;
 	st = begin;
 
 	//определяем идентификаторы и константы
 	std::string word; String^ str;//сюда пишем обработанную лексему
-	int cnt_ident = 0, cnt_keywords = 0, cnt_consts = 0;
+	int cnt_identifiers = 0, cnt_keywords = 0, cnt_consts = 0, cnt_op_sign = 0;
 
 	for (int i = 0; i < code->Length; i++) {
-
+		
 		if (Char::IsLetter(code[i]) || code[i] == '_') {//обрабатываем символ
 			switch (st)
 			{
@@ -482,7 +558,10 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 				word += code[i];
 				st = error;
 				break;
-
+			case op_sign:
+				word += code[i];
+				st = identifier;
+				break;
 			case error:
 				word += code[i];
 				break;
@@ -504,6 +583,10 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 				word += code[i];
 				break;
 
+			case op_sign:
+				word += code[i];
+				break;
+
 			case error:
 				word += code[i];
 				break;
@@ -512,7 +595,57 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 				break;
 			}
 		}
+		else if (code[i] == '=' || code[i] == '+' || code[i] == '-' || code[i] == '/' || code[i] == '*') {//обработка знаков операций
+			switch (st) {
+			case begin:
+			case op_sign:
+				word += code[i];
+				st = op_sign;
+				break;
+			case identifier:
+				word += code[i];
+				st = identifier;
+				break;
+			case constant:
+				word += code[i];
+				st = error;
+				break;
+
+			case error:
+				word += code[i];
+				break;
+
+			default:
+				break;
+			}
+
+		}
+		else if (code[i] == ',' || code[i] == ';' || code[i] == '\"' || code[i] == '\'') {//обработка знаков операций
+			//switch (st) {
+			//case begin:
+			//case op_sign:
+			//	word += code[i];
+			//	st = op_sign;
+			//	break;
+			//case identifier:
+			//	word += code[i];
+			//	st = identifier;
+			//	break;
+			//case constant:
+			//	word += code[i];
+			//	st = error;
+			//	break;
+
+			//case error:
+			//	word += code[i];
+			//	break;
+
+			//default:
+			//	break;
+			//}
+		}
 		else if(code[i] == ' ' || code[i] == '\n') {// пришел разделитель, обрабатываем слово
+
 			str = gcnew String(word.c_str());//переводим из std::string in String^
 			switch (st)
 			{
@@ -524,21 +657,26 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 	
 				
 				//проверка keywords
-				if (word == "int" || word == "double" || word == "char") {
+				if (word == "auto" || word == "break" || word == "case" || word == "char" || word == "const" || word == "auto"\
+					|| word == "continue" || word == "default" || word == "do" || word == "double" || word == "else" || word == "enum"\
+					|| word == "extern" || word == "float" || word == "for" || word == "goto" || word == "if" || word == "int"\
+					|| word == "long" || word == "register" || word == "return" || word == "short" || word == "signed" \
+					|| word == "sizeof" || word == "static" || word == "struct" || word == "switch" || word == "typedef"\
+					|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while") {
 					st = begin;
 					std::cout << "keyword: " << word << '\n';
-
-					//кидаем в таблицу
-					this->keywords->Rows->Add(cnt_keywords++, str, str);
-
+					map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
 					break;
 				}
+
+
 
 				st = begin;
 				std::cout << "identifier: " << word << '\n';
 
-				//кидаем в таблицу
-				this->identifiers->Rows->Add(cnt_ident++,str, "id");
+				//кидаем в мапу с идентификаторами
+				map_identifiers[word] = "id";
+				
 				
 				break;
 
@@ -546,15 +684,26 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 			case constant:
 				st = begin;
 				std::cout << "constanta: " << word << '\n';
-				//запись в таблицу
-				this->constants->Rows->Add(cnt_consts++, str, "number");
+				//запись в мапу констант
+				map_constants[word] = "number";
 
 				break;
+
+				//состояние знака операции
+			case op_sign:
+				st = begin;
+				std::cout << "op_sign: " << word << '\n';
+				//запись в мапу map_op_sign
+				map_op_sign[word] = word;
+
+				break;
+
 
 				//состояние ошибки - выводим идентификатор в котором допущена ошибка
 			case error:
 				std::cout << "Error: " << word << '\n';
 				st = begin;
+
 				break;
 
 			default:
@@ -567,13 +716,43 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	}
 
+	//теперь из мап пишем в таблицу
+	for (auto a : map_keywords) {
+		//std::cout << cnt_keywords << a.first << ' ' << a.second << '\n';
+		String^ leksema = gcnew String(a.first.c_str());
+		String^ code_leks = gcnew String(a.second.c_str());
+		this->keywords->Rows->Add(cnt_keywords++,leksema, code_leks);
+	}
+	for (auto a : map_identifiers) {
+		//std::cout << cnt_identifiers << a.first << ' ' << a.second << '\n';
+		String^ identifier = gcnew String(a.first.c_str());
+		String^ code_identifier = gcnew String(a.second.c_str());
+		this->identifiers->Rows->Add(cnt_identifiers++, identifier, code_identifier);
+	}
+	for (auto a : map_constants) {
+		//std::cout << cnt_consts << a.first << ' ' << a.second << '\n';
+		String^ constanta = gcnew String(a.first.c_str());
+		String^ code_identifier = gcnew String(a.second.c_str());
+		this->constants->Rows->Add(cnt_consts++, constanta, code_identifier);
+	}
+	for (auto a : map_op_sign) {
+		//std::cout << cnt_op_sign << a.first << ' ' << a.second << '\n';
+		String^ sign = gcnew String(a.first.c_str());
+		String^ code_sign = gcnew String(a.second.c_str());
+		this->op_sign->Rows->Add(cnt_op_sign++, sign, code_sign);
+	}
+
+
 	source_code_file->Close();
 }
 
+private: System::Void label6_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }
 void leksanalyz::MyForm::clear_table() {
 	this->keywords->Rows->Clear();
 	this->identifiers->Rows->Clear();
 	this->constants->Rows->Clear();
+	this->op_sign->Rows->Clear();
 }
