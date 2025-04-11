@@ -107,6 +107,10 @@ namespace leksanalyz {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn13;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn14;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn15;
+	private: System::Windows::Forms::Label^ label9;
+	private: System::Windows::Forms::TextBox^ descriptive_code;
+	private: System::Windows::Forms::Button^ make_descr_code;
+
 
 
 
@@ -165,6 +169,9 @@ namespace leksanalyz {
 			this->dataGridViewTextBoxColumn13 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn14 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn15 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->label9 = (gcnew System::Windows::Forms::Label());
+			this->descriptive_code = (gcnew System::Windows::Forms::TextBox());
+			this->make_descr_code = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants))->BeginInit();
@@ -175,25 +182,28 @@ namespace leksanalyz {
 			// 
 			// input_box
 			// 
-			this->input_box->Location = System::Drawing::Point(12, 66);
+			this->input_box->Location = System::Drawing::Point(13, 48);
+			this->input_box->Margin = System::Windows::Forms::Padding(4);
 			this->input_box->Multiline = true;
 			this->input_box->Name = L"input_box";
-			this->input_box->Size = System::Drawing::Size(347, 174);
+			this->input_box->Size = System::Drawing::Size(461, 213);
 			this->input_box->TabIndex = 0;
 			// 
 			// output_box
 			// 
-			this->output_box->Location = System::Drawing::Point(575, 66);
+			this->output_box->Location = System::Drawing::Point(762, 48);
+			this->output_box->Margin = System::Windows::Forms::Padding(4);
 			this->output_box->Multiline = true;
 			this->output_box->Name = L"output_box";
-			this->output_box->Size = System::Drawing::Size(347, 174);
+			this->output_box->Size = System::Drawing::Size(461, 213);
 			this->output_box->TabIndex = 1;
 			// 
 			// preprocess
 			// 
-			this->preprocess->Location = System::Drawing::Point(382, 66);
+			this->preprocess->Location = System::Drawing::Point(509, 48);
+			this->preprocess->Margin = System::Windows::Forms::Padding(4);
 			this->preprocess->Name = L"preprocess";
-			this->preprocess->Size = System::Drawing::Size(165, 46);
+			this->preprocess->Size = System::Drawing::Size(220, 57);
 			this->preprocess->TabIndex = 2;
 			this->preprocess->Text = L"Preprocessing";
 			this->preprocess->UseVisualStyleBackColor = true;
@@ -204,9 +214,10 @@ namespace leksanalyz {
 			this->label1->AutoSize = true;
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label1->Location = System::Drawing::Point(146, 43);
+			this->label1->Location = System::Drawing::Point(199, 19);
+			this->label1->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(99, 20);
+			this->label1->Size = System::Drawing::Size(123, 25);
 			this->label1->TabIndex = 3;
 			this->label1->Text = L"Source code";
 			// 
@@ -215,25 +226,28 @@ namespace leksanalyz {
 			this->label2->AutoSize = true;
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label2->Location = System::Drawing::Point(680, 43);
+			this->label2->Location = System::Drawing::Point(915, 19);
+			this->label2->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(146, 20);
+			this->label2->Size = System::Drawing::Size(181, 25);
 			this->label2->TabIndex = 4;
 			this->label2->Text = L"Preprocessed code";
 			// 
 			// count_lines
 			// 
 			this->count_lines->AutoSize = true;
-			this->count_lines->Location = System::Drawing::Point(478, 344);
+			this->count_lines->Location = System::Drawing::Point(612, 500);
+			this->count_lines->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->count_lines->Name = L"count_lines";
-			this->count_lines->Size = System::Drawing::Size(0, 13);
+			this->count_lines->Size = System::Drawing::Size(0, 16);
 			this->count_lines->TabIndex = 5;
 			// 
 			// leks
 			// 
-			this->leks->Location = System::Drawing::Point(382, 136);
+			this->leks->Location = System::Drawing::Point(509, 113);
+			this->leks->Margin = System::Windows::Forms::Padding(4);
 			this->leks->Name = L"leks";
-			this->leks->Size = System::Drawing::Size(165, 47);
+			this->leks->Size = System::Drawing::Size(220, 58);
 			this->leks->TabIndex = 6;
 			this->leks->Text = L"leks";
 			this->leks->UseVisualStyleBackColor = true;
@@ -248,15 +262,18 @@ namespace leksanalyz {
 				this->num, this->Leksema,
 					this->Code
 			});
-			this->keywords->Location = System::Drawing::Point(42, 279);
+			this->keywords->Location = System::Drawing::Point(31, 420);
+			this->keywords->Margin = System::Windows::Forms::Padding(4);
 			this->keywords->Name = L"keywords";
 			this->keywords->ReadOnly = true;
-			this->keywords->Size = System::Drawing::Size(275, 150);
+			this->keywords->RowHeadersWidth = 51;
+			this->keywords->Size = System::Drawing::Size(367, 185);
 			this->keywords->TabIndex = 7;
 			// 
 			// num
 			// 
 			this->num->HeaderText = L"№";
+			this->num->MinimumWidth = 6;
 			this->num->Name = L"num";
 			this->num->ReadOnly = true;
 			this->num->Width = 30;
@@ -264,14 +281,18 @@ namespace leksanalyz {
 			// Leksema
 			// 
 			this->Leksema->HeaderText = L"Leksema";
+			this->Leksema->MinimumWidth = 6;
 			this->Leksema->Name = L"Leksema";
 			this->Leksema->ReadOnly = true;
+			this->Leksema->Width = 125;
 			// 
 			// Code
 			// 
 			this->Code->HeaderText = L"Code";
+			this->Code->MinimumWidth = 6;
 			this->Code->Name = L"Code";
 			this->Code->ReadOnly = true;
+			this->Code->Width = 125;
 			// 
 			// identifiers
 			// 
@@ -282,15 +303,18 @@ namespace leksanalyz {
 				this->dataGridViewTextBoxColumn1,
 					this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3
 			});
-			this->identifiers->Location = System::Drawing::Point(339, 279);
+			this->identifiers->Location = System::Drawing::Point(427, 420);
+			this->identifiers->Margin = System::Windows::Forms::Padding(4);
 			this->identifiers->Name = L"identifiers";
 			this->identifiers->ReadOnly = true;
-			this->identifiers->Size = System::Drawing::Size(274, 150);
+			this->identifiers->RowHeadersWidth = 51;
+			this->identifiers->Size = System::Drawing::Size(365, 185);
 			this->identifiers->TabIndex = 8;
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
 			this->dataGridViewTextBoxColumn1->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn1->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn1->Name = L"dataGridViewTextBoxColumn1";
 			this->dataGridViewTextBoxColumn1->ReadOnly = true;
 			this->dataGridViewTextBoxColumn1->Width = 30;
@@ -298,23 +322,28 @@ namespace leksanalyz {
 			// dataGridViewTextBoxColumn2
 			// 
 			this->dataGridViewTextBoxColumn2->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn2->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn2->Name = L"dataGridViewTextBoxColumn2";
 			this->dataGridViewTextBoxColumn2->ReadOnly = true;
+			this->dataGridViewTextBoxColumn2->Width = 125;
 			// 
 			// dataGridViewTextBoxColumn3
 			// 
 			this->dataGridViewTextBoxColumn3->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn3->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn3->Name = L"dataGridViewTextBoxColumn3";
 			this->dataGridViewTextBoxColumn3->ReadOnly = true;
+			this->dataGridViewTextBoxColumn3->Width = 125;
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label3->Location = System::Drawing::Point(115, 256);
+			this->label3->Location = System::Drawing::Point(128, 392);
+			this->label3->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(122, 20);
+			this->label3->Size = System::Drawing::Size(154, 25);
 			this->label3->TabIndex = 9;
 			this->label3->Text = L"KEYWORDS(1)";
 			// 
@@ -323,9 +352,10 @@ namespace leksanalyz {
 			this->label4->AutoSize = true;
 			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label4->Location = System::Drawing::Point(416, 256);
+			this->label4->Location = System::Drawing::Point(530, 392);
+			this->label4->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(130, 20);
+			this->label4->Size = System::Drawing::Size(158, 25);
 			this->label4->TabIndex = 10;
 			this->label4->Text = L"IDENTIFIERS(2)";
 			// 
@@ -338,15 +368,18 @@ namespace leksanalyz {
 				this->dataGridViewTextBoxColumn4,
 					this->dataGridViewTextBoxColumn5, this->dataGridViewTextBoxColumn6
 			});
-			this->constants->Location = System::Drawing::Point(648, 279);
+			this->constants->Location = System::Drawing::Point(839, 420);
+			this->constants->Margin = System::Windows::Forms::Padding(4);
 			this->constants->Name = L"constants";
 			this->constants->ReadOnly = true;
-			this->constants->Size = System::Drawing::Size(274, 150);
+			this->constants->RowHeadersWidth = 51;
+			this->constants->Size = System::Drawing::Size(365, 185);
 			this->constants->TabIndex = 11;
 			// 
 			// dataGridViewTextBoxColumn4
 			// 
 			this->dataGridViewTextBoxColumn4->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn4->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn4->Name = L"dataGridViewTextBoxColumn4";
 			this->dataGridViewTextBoxColumn4->ReadOnly = true;
 			this->dataGridViewTextBoxColumn4->Width = 30;
@@ -354,23 +387,28 @@ namespace leksanalyz {
 			// dataGridViewTextBoxColumn5
 			// 
 			this->dataGridViewTextBoxColumn5->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn5->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn5->Name = L"dataGridViewTextBoxColumn5";
 			this->dataGridViewTextBoxColumn5->ReadOnly = true;
+			this->dataGridViewTextBoxColumn5->Width = 125;
 			// 
 			// dataGridViewTextBoxColumn6
 			// 
 			this->dataGridViewTextBoxColumn6->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn6->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn6->Name = L"dataGridViewTextBoxColumn6";
 			this->dataGridViewTextBoxColumn6->ReadOnly = true;
+			this->dataGridViewTextBoxColumn6->Width = 125;
 			// 
 			// label5
 			// 
 			this->label5->AutoSize = true;
 			this->label5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label5->Location = System::Drawing::Point(718, 256);
+			this->label5->Location = System::Drawing::Point(932, 392);
+			this->label5->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label5->Name = L"label5";
-			this->label5->Size = System::Drawing::Size(124, 20);
+			this->label5->Size = System::Drawing::Size(164, 25);
 			this->label5->TabIndex = 12;
 			this->label5->Text = L"CONSTANTS(3)";
 			// 
@@ -383,15 +421,18 @@ namespace leksanalyz {
 				this->dataGridViewTextBoxColumn7,
 					this->dataGridViewTextBoxColumn8, this->dataGridViewTextBoxColumn9
 			});
-			this->op_sign->Location = System::Drawing::Point(42, 477);
+			this->op_sign->Location = System::Drawing::Point(31, 664);
+			this->op_sign->Margin = System::Windows::Forms::Padding(4);
 			this->op_sign->Name = L"op_sign";
 			this->op_sign->ReadOnly = true;
-			this->op_sign->Size = System::Drawing::Size(275, 150);
+			this->op_sign->RowHeadersWidth = 51;
+			this->op_sign->Size = System::Drawing::Size(367, 185);
 			this->op_sign->TabIndex = 13;
 			// 
 			// dataGridViewTextBoxColumn7
 			// 
 			this->dataGridViewTextBoxColumn7->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn7->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn7->Name = L"dataGridViewTextBoxColumn7";
 			this->dataGridViewTextBoxColumn7->ReadOnly = true;
 			this->dataGridViewTextBoxColumn7->Width = 30;
@@ -399,35 +440,41 @@ namespace leksanalyz {
 			// dataGridViewTextBoxColumn8
 			// 
 			this->dataGridViewTextBoxColumn8->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn8->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn8->Name = L"dataGridViewTextBoxColumn8";
 			this->dataGridViewTextBoxColumn8->ReadOnly = true;
+			this->dataGridViewTextBoxColumn8->Width = 125;
 			// 
 			// dataGridViewTextBoxColumn9
 			// 
 			this->dataGridViewTextBoxColumn9->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn9->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn9->Name = L"dataGridViewTextBoxColumn9";
 			this->dataGridViewTextBoxColumn9->ReadOnly = true;
+			this->dataGridViewTextBoxColumn9->Width = 125;
 			// 
 			// label6
 			// 
 			this->label6->AutoSize = true;
 			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label6->Location = System::Drawing::Point(105, 454);
+			this->label6->Location = System::Drawing::Point(115, 636);
+			this->label6->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label6->Name = L"label6";
-			this->label6->Size = System::Drawing::Size(165, 20);
+			this->label6->Size = System::Drawing::Size(207, 25);
 			this->label6->TabIndex = 14;
 			this->label6->Text = L"OPERATION SIGN(4)";
-			this->label6->Click += gcnew System::EventHandler(this, &MyForm::label6_Click);
+			
 			// 
 			// label7
 			// 
 			this->label7->AutoSize = true;
 			this->label7->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label7->Location = System::Drawing::Point(404, 454);
+			this->label7->Location = System::Drawing::Point(514, 636);
+			this->label7->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label7->Name = L"label7";
-			this->label7->Size = System::Drawing::Size(152, 20);
+			this->label7->Size = System::Drawing::Size(191, 25);
 			this->label7->TabIndex = 16;
 			this->label7->Text = L"COMPARE SIGN(5)";
 			// 
@@ -440,15 +487,18 @@ namespace leksanalyz {
 				this->dataGridViewTextBoxColumn10,
 					this->dataGridViewTextBoxColumn11, this->dataGridViewTextBoxColumn12
 			});
-			this->comp_sign->Location = System::Drawing::Point(339, 477);
+			this->comp_sign->Location = System::Drawing::Point(427, 664);
+			this->comp_sign->Margin = System::Windows::Forms::Padding(4);
 			this->comp_sign->Name = L"comp_sign";
 			this->comp_sign->ReadOnly = true;
-			this->comp_sign->Size = System::Drawing::Size(275, 150);
+			this->comp_sign->RowHeadersWidth = 51;
+			this->comp_sign->Size = System::Drawing::Size(367, 185);
 			this->comp_sign->TabIndex = 15;
 			// 
 			// dataGridViewTextBoxColumn10
 			// 
 			this->dataGridViewTextBoxColumn10->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn10->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn10->Name = L"dataGridViewTextBoxColumn10";
 			this->dataGridViewTextBoxColumn10->ReadOnly = true;
 			this->dataGridViewTextBoxColumn10->Width = 30;
@@ -456,23 +506,28 @@ namespace leksanalyz {
 			// dataGridViewTextBoxColumn11
 			// 
 			this->dataGridViewTextBoxColumn11->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn11->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn11->Name = L"dataGridViewTextBoxColumn11";
 			this->dataGridViewTextBoxColumn11->ReadOnly = true;
+			this->dataGridViewTextBoxColumn11->Width = 125;
 			// 
 			// dataGridViewTextBoxColumn12
 			// 
 			this->dataGridViewTextBoxColumn12->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn12->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn12->Name = L"dataGridViewTextBoxColumn12";
 			this->dataGridViewTextBoxColumn12->ReadOnly = true;
+			this->dataGridViewTextBoxColumn12->Width = 125;
 			// 
 			// label8
 			// 
 			this->label8->AutoSize = true;
 			this->label8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->label8->Location = System::Drawing::Point(718, 454);
+			this->label8->Location = System::Drawing::Point(932, 636);
+			this->label8->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
 			this->label8->Name = L"label8";
-			this->label8->Size = System::Drawing::Size(138, 20);
+			this->label8->Size = System::Drawing::Size(174, 25);
 			this->label8->TabIndex = 18;
 			this->label8->Text = L"SEPARATORS(6)";
 			// 
@@ -485,15 +540,18 @@ namespace leksanalyz {
 				this->dataGridViewTextBoxColumn13,
 					this->dataGridViewTextBoxColumn14, this->dataGridViewTextBoxColumn15
 			});
-			this->separators->Location = System::Drawing::Point(647, 477);
+			this->separators->Location = System::Drawing::Point(838, 664);
+			this->separators->Margin = System::Windows::Forms::Padding(4);
 			this->separators->Name = L"separators";
 			this->separators->ReadOnly = true;
-			this->separators->Size = System::Drawing::Size(275, 150);
+			this->separators->RowHeadersWidth = 51;
+			this->separators->Size = System::Drawing::Size(367, 185);
 			this->separators->TabIndex = 17;
 			// 
 			// dataGridViewTextBoxColumn13
 			// 
 			this->dataGridViewTextBoxColumn13->HeaderText = L"№";
+			this->dataGridViewTextBoxColumn13->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn13->Name = L"dataGridViewTextBoxColumn13";
 			this->dataGridViewTextBoxColumn13->ReadOnly = true;
 			this->dataGridViewTextBoxColumn13->Width = 30;
@@ -501,20 +559,57 @@ namespace leksanalyz {
 			// dataGridViewTextBoxColumn14
 			// 
 			this->dataGridViewTextBoxColumn14->HeaderText = L"Leksema";
+			this->dataGridViewTextBoxColumn14->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn14->Name = L"dataGridViewTextBoxColumn14";
 			this->dataGridViewTextBoxColumn14->ReadOnly = true;
+			this->dataGridViewTextBoxColumn14->Width = 125;
 			// 
 			// dataGridViewTextBoxColumn15
 			// 
 			this->dataGridViewTextBoxColumn15->HeaderText = L"Code";
+			this->dataGridViewTextBoxColumn15->MinimumWidth = 6;
 			this->dataGridViewTextBoxColumn15->Name = L"dataGridViewTextBoxColumn15";
 			this->dataGridViewTextBoxColumn15->ReadOnly = true;
+			this->dataGridViewTextBoxColumn15->Width = 125;
+			// 
+			// label9
+			// 
+			this->label9->AutoSize = true;
+			this->label9->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label9->Location = System::Drawing::Point(182, 274);
+			this->label9->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label9->Name = L"label9";
+			this->label9->Size = System::Drawing::Size(156, 25);
+			this->label9->TabIndex = 19;
+			this->label9->Text = L"Descriptive code";
+			// 
+			// descriptive_code
+			// 
+			this->descriptive_code->Location = System::Drawing::Point(12, 311);
+			this->descriptive_code->Name = L"descriptive_code";
+			this->descriptive_code->Size = System::Drawing::Size(462, 22);
+			this->descriptive_code->TabIndex = 20;
+			// 
+			// make_descr_code
+			// 
+			this->make_descr_code->Location = System::Drawing::Point(509, 179);
+			this->make_descr_code->Margin = System::Windows::Forms::Padding(4);
+			this->make_descr_code->Name = L"make_descr_code";
+			this->make_descr_code->Size = System::Drawing::Size(220, 58);
+			this->make_descr_code->TabIndex = 21;
+			this->make_descr_code->Text = L"Descriptive code";
+			this->make_descr_code->UseVisualStyleBackColor = true;
+			this->make_descr_code->Click += gcnew System::EventHandler(this, &MyForm::make_descr_code_Click);
 			// 
 			// MyForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(934, 669);
+			this->ClientSize = System::Drawing::Size(1245, 898);
+			this->Controls->Add(this->make_descr_code);
+			this->Controls->Add(this->descriptive_code);
+			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label8);
 			this->Controls->Add(this->separators);
 			this->Controls->Add(this->label7);
@@ -534,6 +629,7 @@ namespace leksanalyz {
 			this->Controls->Add(this->preprocess);
 			this->Controls->Add(this->output_box);
 			this->Controls->Add(this->input_box);
+			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"MyForm";
 			this->Text = L"Leks";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->EndInit();
@@ -659,11 +755,11 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ code = source_code_file->ReadToEnd();
 	source_code_file->Close();
 	
-	enum state {begin, identifier, constant, op_sign, comp_sign,  error} st;
+	enum state {begin, identifier, constant, str_constant, op_sign, comp_sign,  error} st;
 	st = begin;
 
 	//определяем идентификаторы и константы
-	std::string word; String^ str;//сюда пишем обработанную лексему
+	std::string word; //сюда пишем обработанную лексему
 
 	int cnt_identifiers = 0, cnt_keywords = 0, cnt_consts = 0, cnt_op_sign = 0, cnt_comp_sign = 0, cnt_sep_sign = 0;
 
@@ -680,6 +776,9 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 			case constant:
 				word += code[i];
 				st = error;
+				break;
+			case str_constant:
+				word += code[i];
 				break;
 			case op_sign:
 				word += code[i];
@@ -774,22 +873,26 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 			}
 
 		}
-		else if(code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',') {// пришел разделитель, обрабатываем слово
+		else if(code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"') {// пришел разделитель, обрабатываем слово
 
-			if (code[i] == ';' || code[i] == ',') {
+			if (code[i] == ';' || code[i] == ',' || code[i] == '"') {
 				std::cout << "separator: " << code[i];
 				std::string c_str; c_str.push_back(code[i]);//Для перевода из String^ в std::string
 				map_separator_sign[c_str] = code[i];
+
+				
 			}
 
-
-			str = gcnew String(word.c_str());//переводим из std::string in String^
+			
 			switch (st)
 			{
 			case begin:
+				if (code[i] == '"') {
+					st = str_constant;
+				}
 				break;
 				
-				//состояние идентификатора - определяем ключевое слово или просто идентификатор
+			//состояние идентификатора - определяем ключевое слово или просто идентификатор
 			case identifier:
 	
 				
@@ -799,7 +902,7 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 					|| word == "extern" || word == "float" || word == "for" || word == "goto" || word == "if" || word == "int"\
 					|| word == "long" || word == "register" || word == "return" || word == "short" || word == "signed" \
 					|| word == "sizeof" || word == "static" || word == "struct" || word == "switch" || word == "typedef"\
-					|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while") {
+					|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while" || word == "string") {
 					st = begin;
 					std::cout << "keyword: " << word << '\n';
 					map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
@@ -817,7 +920,7 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 				
 				break;
 
-				//состояние константы - проверяем без ошибок ли написано число
+			//состояние константы - проверяем без ошибок ли написано число
 			case constant:
 				st = begin;
 				std::cout << "constanta: " << word << '\n';
@@ -826,7 +929,15 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 				break;
 
-				//состояние знака операции
+			//строковая константа
+			case str_constant:
+				st = begin;
+				std::cout << "str_const: " << word << '\n';
+				map_constants[word] = "string";
+				break;
+				
+
+			//состояние знака операции
 			case op_sign:
 				st = begin;
 				std::cout << "op_sign: " << word << '\n';
@@ -835,6 +946,7 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 				break;
 
+			//Знак сравнения
 			case comp_sign:
 				st = begin;
 				std::cout << "comp_sign: " << word << '\n';
@@ -843,7 +955,7 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 				break;
 
-				//состояние ошибки - выводим идентификатор в котором допущена ошибка
+			//состояние ошибки - выводим идентификатор в котором допущена ошибка
 			case error:
 				std::cout << "Error: " << word << '\n';
 				st = begin;
@@ -862,49 +974,62 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 	//теперь из мап пишем в таблицу
 	for (auto a : map_keywords) {
-		//std::cout << cnt_keywords << a.first << ' ' << a.second << '\n';
 		String^ leksema = gcnew String(a.first.c_str());
 		String^ code_leks = gcnew String(a.second.c_str());
 		this->keywords->Rows->Add(cnt_keywords++,leksema, code_leks);
 	}
 	for (auto a : map_identifiers) {
-		//std::cout << cnt_identifiers << a.first << ' ' << a.second << '\n';
 		String^ identifier = gcnew String(a.first.c_str());
 		String^ code_identifier = gcnew String(a.second.c_str());
 		this->identifiers->Rows->Add(cnt_identifiers++, identifier, code_identifier);
 	}
 	for (auto a : map_constants) {
-		//std::cout << cnt_consts << a.first << ' ' << a.second << '\n';
 		String^ constanta = gcnew String(a.first.c_str());
 		String^ code_identifier = gcnew String(a.second.c_str());
 		this->constants->Rows->Add(cnt_consts++, constanta, code_identifier);
 	}
 	for (auto a : map_op_sign) {
-		//std::cout << cnt_op_sign << a.first << ' ' << a.second << '\n';
 		String^ sign = gcnew String(a.first.c_str());
 		String^ code_sign = gcnew String(a.second.c_str());
 		this->op_sign->Rows->Add(cnt_op_sign++, sign, code_sign);
 	}
 	for (auto a : map_comp_sign) {
-		//std::cout << cnt_op_sign << a.first << ' ' << a.second << '\n';
 		String^ comp_sign = gcnew String(a.first.c_str());
 		String^ code_comp_sign = gcnew String(a.second.c_str());
 		this->comp_sign->Rows->Add(cnt_comp_sign++, comp_sign, code_comp_sign);
 	}
 	for (auto a : map_separator_sign) {
-		//std::cout << cnt_op_sign << a.first << ' ' << a.second << '\n';
 		String^ sep_sign = gcnew String(a.first.c_str());
 		String^ code_sep_sign = gcnew String(a.second.c_str());
 		this->separators->Rows->Add(cnt_sep_sign++, sep_sign, code_sep_sign);
 	}
+	
 
 
 }
 
-private: System::Void label6_Click(System::Object^ sender, System::EventArgs^ e) {
+
+private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
+
+	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
+	String^ code = source_code_file->ReadToEnd();
+	source_code_file->Close();
+
+	enum state { begin, identifier, constant, op_sign, comp_sign, error } st;
+	st = begin;
+
+	//определяем идентификаторы и константы
+	std::string word; String^ str;//сюда пишем обработанную лексему
+
+	for (int i = 0; i < code->Length; i++) {
+		
+	}
+
 }
 };
 }
+
+
 void leksanalyz::MyForm::clear_table() {
 	this->keywords->Rows->Clear();
 	this->identifiers->Rows->Clear();
