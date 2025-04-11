@@ -1,16 +1,19 @@
 #pragma once
 #include <iostream>
 #include <map>
+#include <vector>
 #include <fstream>
 #include <string>
 
 using namespace System::IO;
 
+namespace my_token {
+	struct token {
+		int num_table;
+		int num_record;
+	};
+}
 
-struct RecordSymTable {
-	std::string token;
-	enum type { id, constanta, function, key_word, operation} type_token;
-};
 
 namespace leksanalyz {
 
@@ -1007,9 +1010,10 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 
 }
-
-
+public: std::vector<my_token::token>* tokens;
+///пишем дескрипторный код
 private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
+	tokens = new std::vector<my_token::token>;//вектор с токенами
 	this->descriptive_code->Clear();
 
 
@@ -1018,7 +1022,7 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 	source_code_file->Close();
 
 	enum state { begin, keyword, identifier, constant, op_sign, comp_sign, error } st;
-	enum temp_state {S0, S1, S2, S3, S4, S5} tmp_st;
+	enum temp_state {S0, S1, S2, S3, S4, S5, S6} tmp_st;
 	st = begin; tmp_st = S0;
 
 	//определяем идентификаторы и константы
@@ -1065,6 +1069,9 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
 				word += code[i];
 				st = error;
+			case S6://были на знаке операции и пришла буква - непорядок
+				word += code[i];
+				st = error;
 			default:
 				break;
 			}
@@ -1073,18 +1080,35 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 		if (Char::IsDigit(code[i])) {
 			switch (tmp_st)
 			{
-			case S0:
+			case S0://начало
 				tmp_st = S5;
 				word += code[i];
 				break;
-			case S5:
+			case S5://константа
+				word += code[i];
+				break;
+			case S6://знак операции - пусть вводят разделитель
+				st = error;
 				word += code[i];
 				break;
 			default:
 				break;
 			}
 		}
-
+		//пришел знак операции
+		if (code[i] == '+' || code[i] == '-' || code[i] == '*' || code[i] == '/' || code[i] == '=') {
+			switch (tmp_st)
+			{
+			case S0:
+				tmp_st = S6;
+				word += code[i];
+				break;
+			default://во всех случаях кроме после разделителя
+				st = error;
+				word += code[i];
+				break;
+			}
+		}
 
 		//пришел разделитель
 		if (Char::IsSeparator(code[i]) || code[i] == ';') {
@@ -1095,12 +1119,15 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				st = identifier;//распознали идентификатор
 				break;
 			case S4:
-				st = keyword;
+				st = keyword;//распознали int
 				break;
 			case S5:
-				if (st != error) {
+				if (st != error) {//распознали константу без ошибок
 					st = constant;
 				}
+				break;
+			case S6:
+				st = op_sign;//знак операции
 				break;
 
 			default:
@@ -1112,27 +1139,44 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			String^ token;
 			String^ number_table;
 
+			int num_table, num_record;
+
 			switch (st) {
 			case keyword:
-				number_table = "1";
+				number_table = "1";//номер таблицы с ключевыми словами
+
+				//ищем совпадения в таблице с лексемой и записываем токен(номер таблицы + номер записи)
 				for each (DataGridViewRow ^ row in this->keywords->Rows) {
 
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";
+						/*String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";*/
+
 						std::cout << "FIND KEYWORD!\n";
+
+						num_table = Int32::Parse(number_table->ToString());
+						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+						my_token::token tok{num_table, num_record};
+						tokens->push_back(tok);
 					}
 
 				}
 				break;
+
 			case identifier:
 				number_table = "2";
 				for each (DataGridViewRow ^ row in this->identifiers->Rows) {
 					
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";
+						/*String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";*/
 						std::cout << "FIND IDENTIFIER!\n";
+
+						//запись в вектор
+						num_table = Int32::Parse(number_table->ToString());
+						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+						my_token::token tok{ num_table, num_record };
+						tokens->push_back(tok);
 					}
 
 				}
@@ -1143,11 +1187,33 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				for each (DataGridViewRow ^ row in this->constants->Rows) {
 					
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";
+						/*String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";*/
 						std::cout << "FIND CONSTANTA!\n";
+						//запись в вектор токенов
+						num_table = Int32::Parse(number_table->ToString());
+						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+						my_token::token tok{ num_table, num_record };
+						tokens->push_back(tok);
 					}
 					
+				}
+				break;
+			case op_sign:
+				number_table = "4";
+				for each(DataGridViewRow ^ row in this->op_sign->Rows) {
+
+					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+						/*String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";*/
+						std::cout << "FIND OP_SIGN!\n";
+						//запись в вектор токенов
+						num_table = Int32::Parse(number_table->ToString());
+						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+						my_token::token tok{ num_table, num_record };
+						tokens->push_back(tok);
+					}
+
 				}
 				break;
 
@@ -1159,15 +1225,21 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			
 			}
 
-			this->descriptive_code->Text += token;
-			word = "";
-			
+			this->descriptive_code->Text += token;//пишем токе в дескр. код
 
+			//очищаем лексему и обнуляем состояния
+			word = "";
 			st = begin;
 			tmp_st = S0;
 		}
 
 
+	}
+	//пишем дескрипторный код идя по токенам из вектора
+	for (auto i : *tokens) {
+		/*std::cout << i.num_table << ' ';
+		std::cout << i.num_record << '\n';*/
+		this->descriptive_code->Text += "[" + i.num_table + "," + i.num_record + "] ";
 	}
 
 }
