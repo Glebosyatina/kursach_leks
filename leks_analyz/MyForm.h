@@ -1010,7 +1010,10 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 
 }
+
+
 public: std::vector<my_token::token>* tokens;
+
 ///пишем дескрипторный код
 private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
 	tokens = new std::vector<my_token::token>;//вектор с токенами
@@ -1022,7 +1025,7 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 	source_code_file->Close();
 
 	enum state { begin, keyword, identifier, constant, op_sign, comp_sign, error } st;
-	enum temp_state {S0, S1, S2, S3, S4, S5, S6} tmp_st;
+	enum temp_state {S0, S1, S2, S3, S4, S5, S6, S7, S8} tmp_st;
 	st = begin; tmp_st = S0;
 
 	//определяем идентификаторы и константы
@@ -1045,7 +1048,7 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				}
 				word += code[i];
 				break;
-			case S1:
+			case S1:	 //состояние идентификатора
 				word += code[i];
 				break;
 			case S2:
@@ -1069,9 +1072,16 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
 				word += code[i];
 				st = error;
+				break;
 			case S6://были на знаке операции и пришла буква - непорядок
 				word += code[i];
 				st = error;
+				break;
+			case S7://знаки сравнения а пришла буква - непорядок, пишем в ошибку
+			case S8:
+				word += code[i];
+				st = error;
+				break;
 			default:
 				break;
 			}
@@ -1088,8 +1098,13 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				word += code[i];
 				break;
 			case S6://знак операции - пусть вводят разделитель
-				st = error;
 				word += code[i];
+				st = error;
+				break;
+			case S7:
+			case S8://знак сравения - нужен разделитель
+				word += code[i];
+				st = error;
 				break;
 			default:
 				break;
@@ -1100,8 +1115,20 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			switch (tmp_st)
 			{
 			case S0:
-				tmp_st = S6;
+				tmp_st = S6;//знак операции
 				word += code[i];
+				break;
+			case S6://второй раз знак = значит это сравнение - S7
+				if (code[i] == '=') {
+					tmp_st = S7;
+					word += code[i];
+				}
+				break;
+			case S8://приходит = после < или >
+				if (code[i] == '=') {
+					tmp_st = S7;
+					word += code[i];
+				}
 				break;
 			default://во всех случаях кроме после разделителя
 				st = error;
@@ -1109,7 +1136,19 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				break;
 			}
 		}
-
+		if (code[i] == '<' || code[i] == '>') {
+			switch (tmp_st)
+			{
+			case S0:
+				tmp_st = S8;//знак сравнения
+				word += code[i];
+				break;
+			default:
+				st = error;
+				word += code[i];
+				break;
+			}
+		}
 		//пришел разделитель
 		if (Char::IsSeparator(code[i]) || code[i] == ';') {
 
@@ -1129,7 +1168,12 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			case S6:
 				st = op_sign;//знак операции
 				break;
-
+			case S7://знак == <= >=
+				st = comp_sign;
+				break;
+			case S8://знаки < or >
+				st = comp_sign;
+				break;
 			default:
 				break;
 			}
@@ -1142,6 +1186,7 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			int num_table, num_record;
 
 			switch (st) {
+				//ключевые слова
 			case keyword:
 				number_table = "1";//номер таблицы с ключевыми словами
 
@@ -1149,8 +1194,6 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				for each (DataGridViewRow ^ row in this->keywords->Rows) {
 
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						/*String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";*/
 
 						std::cout << "FIND KEYWORD!\n";
 
@@ -1163,13 +1206,13 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				}
 				break;
 
+				//идентификаторы
 			case identifier:
 				number_table = "2";
 				for each (DataGridViewRow ^ row in this->identifiers->Rows) {
 					
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						/*String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";*/
+						
 						std::cout << "FIND IDENTIFIER!\n";
 
 						//запись в вектор
@@ -1182,13 +1225,13 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				}
 				break;
 
+				//константы
 			case constant:
 				number_table = "3";
 				for each (DataGridViewRow ^ row in this->constants->Rows) {
 					
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						/*String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";*/
+						
 						std::cout << "FIND CONSTANTA!\n";
 						//запись в вектор токенов
 						num_table = Int32::Parse(number_table->ToString());
@@ -1199,13 +1242,14 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 					
 				}
 				break;
+				
+				//знаки операций
 			case op_sign:
 				number_table = "4";
 				for each(DataGridViewRow ^ row in this->op_sign->Rows) {
 
 					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						/*String^ number = row->Cells[0]->Value->ToString();
-						token = "[" + number_table + ", " + number + "] ";*/
+						
 						std::cout << "FIND OP_SIGN!\n";
 						//запись в вектор токенов
 						num_table = Int32::Parse(number_table->ToString());
@@ -1217,6 +1261,25 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				}
 				break;
 
+				//знаки сравнения
+			case comp_sign:
+				number_table = "5";
+				for each (DataGridViewRow ^ row in this->comp_sign->Rows) {
+
+					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+						
+						std::cout << "FIND COMP_SIGN!\n";
+						//запись в вектор токенов
+						num_table = Int32::Parse(number_table->ToString());
+						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+						my_token::token tok{ num_table, num_record };
+						tokens->push_back(tok);
+					}
+
+				}
+				break;
+
+				//ошибки
 			case error:
 				std::cout << "ERRROR: " << word << '\n';
 				break;
