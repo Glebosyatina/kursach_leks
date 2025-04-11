@@ -1284,8 +1284,6 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				std::cout << "ERRROR: " << word << '\n';
 				break;
 
-
-			
 			}
 
 			this->descriptive_code->Text += token;//пишем токе в дескр. код
