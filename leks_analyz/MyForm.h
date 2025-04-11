@@ -1010,19 +1010,164 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
 
 private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
+	this->descriptive_code->Clear();
+
 
 	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
 	String^ code = source_code_file->ReadToEnd();
 	source_code_file->Close();
 
-	enum state { begin, identifier, constant, op_sign, comp_sign, error } st;
-	st = begin;
+	enum state { begin, keyword, identifier, constant, op_sign, comp_sign, error } st;
+	enum temp_state {S0, S1, S2, S3, S4, S5} tmp_st;
+	st = begin; tmp_st = S0;
 
 	//определяем идентификаторы и константы
-	std::string word; String^ str;//сюда пишем обработанную лексему
+	std::string word = ""; //сюда пишем обработанную лексему
 
 	for (int i = 0; i < code->Length; i++) {
-		
+
+		//пришла буква
+		if (Char::IsLetter(code[i]) || code[i] == '_') {
+
+			switch (tmp_st)
+			{
+			case S0:
+				tmp_st = S1;   //состояние идентификатора
+				if (code[i] == 'i') {
+					tmp_st = S2;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+			case S1:
+				word += code[i];
+				break;
+			case S2:
+				if (code[i] == 'n') {
+					tmp_st = S3;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+			case S3:
+				if (code[i] == 't') {
+					tmp_st = S4;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+			case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
+				word += code[i];
+				st = error;
+			default:
+				break;
+			}
+		}
+		//пришла цифра
+		if (Char::IsDigit(code[i])) {
+			switch (tmp_st)
+			{
+			case S0:
+				tmp_st = S5;
+				word += code[i];
+				break;
+			case S5:
+				word += code[i];
+				break;
+			default:
+				break;
+			}
+		}
+
+
+		//пришел разделитель
+		if (Char::IsSeparator(code[i]) || code[i] == ';') {
+
+			//определяем что за лексема
+			switch (tmp_st) {
+			case S1:
+				st = identifier;//распознали идентификатор
+				break;
+			case S4:
+				st = keyword;
+				break;
+			case S5:
+				if (st != error) {
+					st = constant;
+				}
+				break;
+
+			default:
+				break;
+			}
+
+			//пишем дескрипторный код
+			String^ leksema = gcnew String(word.c_str());
+			String^ token;
+			String^ number_table;
+
+			switch (st) {
+			case keyword:
+				number_table = "1";
+				for each (DataGridViewRow ^ row in this->keywords->Rows) {
+
+					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+						String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";
+						std::cout << "FIND KEYWORD!\n";
+					}
+
+				}
+				break;
+			case identifier:
+				number_table = "2";
+				for each (DataGridViewRow ^ row in this->identifiers->Rows) {
+					
+					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+						String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";
+						std::cout << "FIND IDENTIFIER!\n";
+					}
+
+				}
+				break;
+
+			case constant:
+				number_table = "3";
+				for each (DataGridViewRow ^ row in this->constants->Rows) {
+					
+					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+						String^ number = row->Cells[0]->Value->ToString();
+						token = "[" + number_table + ", " + number + "] ";
+						std::cout << "FIND CONSTANTA!\n";
+					}
+					
+				}
+				break;
+
+			case error:
+				std::cout << "ERRROR: " << word << '\n';
+				break;
+
+
+			
+			}
+
+			this->descriptive_code->Text += token;
+			word = "";
+			
+
+			st = begin;
+			tmp_st = S0;
+		}
+
+
 	}
 
 }
