@@ -876,9 +876,9 @@ private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 			}
 
 		}
-		else if(code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"') {// пришел разделитель, обрабатываем слово
+		else if(code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
 
-			if (code[i] == ';' || code[i] == ',' || code[i] == '"') {
+			if (code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {
 				std::cout << "separator: " << code[i];
 				std::string c_str; c_str.push_back(code[i]);//Для перевода из String^ в std::string
 				map_separator_sign[c_str] = code[i];
@@ -1025,7 +1025,7 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 	source_code_file->Close();
 
 	enum state { begin, keyword, identifier, constant, op_sign, comp_sign, error } st;
-	enum temp_state {S0, S1, S2, S3, S4, S5, S6, S7, S8} tmp_st;
+	enum temp_state {S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14} tmp_st;
 	st = begin; tmp_st = S0;
 
 	//определяем идентификаторы и константы
@@ -1042,6 +1042,9 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				tmp_st = S1;   //состояние идентификатора
 				if (code[i] == 'i') {
 					tmp_st = S2;
+				}
+				else if (code[i] == 'c') {
+					tmp_st = S11;
 				}
 				else {
 					tmp_st = S1;
@@ -1069,6 +1072,35 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				}
 				word += code[i];
 				break;
+
+			case S11:
+				if (code[i] == 'h') {
+					tmp_st = S12;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+			case S12:
+				if (code[i] == 'a') {
+					tmp_st = S13;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+			case S13:
+				if (code[i] == 'r') {
+					tmp_st = S14;
+				}
+				else {
+					tmp_st = S1;
+				}
+				word += code[i];
+				break;
+
 			case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
 				word += code[i];
 				st = error;
@@ -1150,15 +1182,18 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 			}
 		}
 		//пришел разделитель
-		if (Char::IsSeparator(code[i]) || code[i] == ';') {
+		if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {
 
 			//определяем что за лексема
 			switch (tmp_st) {
 			case S1:
 				st = identifier;//распознали идентификатор
 				break;
-			case S4:
-				st = keyword;//распознали int
+			case S4://int
+				st = keyword;//распознали int и 
+				break;
+			case S14://char
+				st = keyword;//распознали char и 
 				break;
 			case S5:
 				if (st != error) {//распознали константу без ошибок
@@ -1175,12 +1210,14 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 				st = comp_sign;
 				break;
 			default:
+				st = identifier;
 				break;
 			}
 
 			//пишем дескрипторный код
-			String^ leksema = gcnew String(word.c_str());
-			String^ token;
+			String^ leksema = gcnew String(word.c_str());//лексема 
+			
+
 			String^ number_table;
 
 			int num_table, num_record;
@@ -1286,7 +1323,21 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 
 			}
 
-			this->descriptive_code->Text += token;//пишем токе в дескр. код
+			//пишем сам разделитель в дескр. код
+			for each(DataGridViewRow ^ row in this->separators->Rows) {
+				number_table = "6";
+				if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString(code[i]))) {
+
+					std::cout << "FIND SEP_SIGN!\n";
+					//запись в вектор токенов
+					num_table = Int32::Parse(number_table->ToString());
+					num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+					my_token::token tok{ num_table, num_record };
+					tokens->push_back(tok);
+				}
+
+			}
+
 
 			//очищаем лексему и обнуляем состояния
 			word = "";
@@ -1298,8 +1349,6 @@ private: System::Void make_descr_code_Click(System::Object^ sender, System::Even
 	}
 	//пишем дескрипторный код идя по токенам из вектора
 	for (auto i : *tokens) {
-		/*std::cout << i.num_table << ' ';
-		std::cout << i.num_record << '\n';*/
 		this->descriptive_code->Text += "[" + i.num_table + "," + i.num_record + "] ";
 	}
 
@@ -1316,4 +1365,5 @@ void leksanalyz::MyForm::clear_table() {
 	this->comp_sign->Rows->Clear();
 	this->separators->Rows->Clear();
 
+	delete tokens;
 }
