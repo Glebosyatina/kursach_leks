@@ -737,7 +737,7 @@ namespace leksanalyz {
 
 
 	}
-
+		   /////////////////////////////////////////////////////////////////////////////////////////
 		   //лексический анализ
 
 	private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -758,8 +758,8 @@ namespace leksanalyz {
 		String^ code = source_code_file->ReadToEnd();
 		source_code_file->Close();
 
-		enum state { begin, keyword, identifier, constant, op_sign, comp_sign, separator, error } st;
-		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
+		enum state { begin, keyword, identifier, constant, str_constant, op_sign, comp_sign, separator, error } st;
+		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
 		st = begin; tmp_st = S0;
 
 		//определяем идентификаторы и константы
@@ -769,7 +769,7 @@ namespace leksanalyz {
 
 		for (int i = 0; i < code->Length; i++) {
 
-			if (Char::IsLetter(code[i]) || code[i] == '_') {//обрабатываем символ
+			if (Char::IsLetter(code[i]) || code[i] == '_' || code[i] == '?') {//обрабатываем символ
 				switch (tmp_st)
 				{
 				case S0:
@@ -897,6 +897,9 @@ namespace leksanalyz {
 					word += code[i];
 					st = error;
 					break;
+				case S9://строковая костанта
+					word += code[i];
+					break;
 				default:
 					break;
 				}
@@ -921,6 +924,9 @@ namespace leksanalyz {
 					word += code[i];
 					st = error;
 					break;
+				case S9://строковая костанта
+					word += code[i];
+					break;
 				default:
 					break;
 				}
@@ -944,6 +950,9 @@ namespace leksanalyz {
 						word += code[i];
 					}
 					break;
+				case S9://строковая костанта
+					word += code[i];
+					break;
 				default://во всех случаях кроме после разделителя
 					st = error;
 					word += code[i];
@@ -964,13 +973,17 @@ namespace leksanalyz {
 					break;
 				}
 			}
-			else if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
-
+			else if (code[i] == ' ' || code[i] == '\n' || code[i] == '"' || code[i] == ';' || code[i] == ',' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
+				
 				
 				//определяем что за лексема
 				switch (tmp_st) {
 				case S0://распознали разделитель
 					st = separator;
+					if (code[i] == '"') {
+						std::cout << "first \"";//встретили первую кавычку
+						st = str_constant;
+					}
 					break;
 				case S1:
 					st = identifier;//распознали идентификатор
@@ -997,6 +1010,13 @@ namespace leksanalyz {
 					break;
 				case S8://знаки < or >
 					st = comp_sign;
+					break;
+				case S9:
+					if (st == str_constant && code[i] == '"') {//встретили вторую кавычку
+						std::cout << "second \"";
+						st = constant;
+					}
+
 					break;
 				default:
 					st = identifier;
@@ -1041,13 +1061,20 @@ namespace leksanalyz {
 
 					//состояние константы - проверяем без ошибок ли написано число
 				case constant:
-					std::cout << "constanta: " << word << '\n';
-					//запись в мапу констант
-					map_constants[word] = "number";
-					i--;//чтобы откатиться и распознать разделитель
+					if (tmp_st == S9) {
+						std::cout << "string constant: " << word << '\n';
+						//запись в мапу констант
+						map_constants[word] = "string";
+					}
+					else {
+						std::cout << "constanta: " << word << '\n';
+						//запись в мапу констант
+						map_constants[word] = "number";
+						i--;//чтобы откатиться и распознать разделитель
+					}
+					
 					break;
-
-
+				
 					//состояние знака операции
 				case op_sign:
 					std::cout << "op_sign: " << word << '\n';
@@ -1063,7 +1090,15 @@ namespace leksanalyz {
 					map_comp_sign[word] = word;
 					i--;//чтобы откатиться и распознать разделитель
 					break;
-
+				case str_constant:
+					if (tmp_st != S9) {
+						tmp_st = S9;//когда встретилась первая кавычка переходим в состояние S9
+					}
+					else {
+						word += code[i];//уже находимся в S9 просто пишем строку
+						break;
+					}
+					break;
 					//состояние ошибки - выводим идентификатор в котором допущена ошибка
 				case error:
 					std::cout << "Error: " << word << '\n';
@@ -1073,10 +1108,12 @@ namespace leksanalyz {
 					break;
 				}
 
-
-				word = "";//очищаем для следующего слова
-				st = begin;
-				tmp_st = S0;
+		
+				if (st != str_constant) {
+					word = "";//очищаем для следующего слова
+					st = begin;
+					tmp_st = S0;
+				}
 			}
 
 		}
