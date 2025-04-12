@@ -126,7 +126,7 @@ namespace leksanalyz {
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -467,7 +467,7 @@ namespace leksanalyz {
 			this->label6->Size = System::Drawing::Size(207, 25);
 			this->label6->TabIndex = 14;
 			this->label6->Text = L"OPERATION SIGN(4)";
-			
+
 			// 
 			// label7
 			// 
@@ -647,7 +647,7 @@ namespace leksanalyz {
 		}
 #pragma endregion
 
-	//удаляем лишние пробелы и комменты
+		//удаляем лишние пробелы и комменты
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->output_box->Text = "";
 		String^ input = this->input_box->Text;
@@ -659,11 +659,11 @@ namespace leksanalyz {
 		String^ result;//сюда пишем обработанный код
 
 		for (int i = 0; i < this->input_box->Text->Length; i++) {
-			
+
 			switch (st) {
-				
+
 			case comment:
-				if (input[i] == '\n'){//окончание коммента
+				if (input[i] == '\n') {//окончание коммента
 					st = begin;
 				}
 				break;
@@ -680,7 +680,7 @@ namespace leksanalyz {
 				else {
 					break;//продолжают идти пробелы и тд
 				}
-				
+
 			case begin://идут какие то слова которые нужно печатать
 
 				if (input[i] == '/' && input[i + 1] == '/') {
@@ -689,7 +689,7 @@ namespace leksanalyz {
 				else if (input[i] == '/' && input[i + 1] == '*') {
 					st = long_comment; i++;//начало длинного коммента
 				}
-				else if (input[i] == '\n' && i < this->input_box->Text->Length - 2 && input[i + 2] == '\n' ) {
+				else if (input[i] == '\n' && i < this->input_box->Text->Length - 2 && input[i + 2] == '\n') {
 					st = space;//встречаем перенос и за ним еще переносы (проверяем что символ не последний)
 				}
 				else if (input[i] == ' ') {
@@ -719,7 +719,7 @@ namespace leksanalyz {
 			num++;
 			res_temp += one_str + '\n';
 		}
-		
+
 		//пишем нумерованный текст в файл
 		std::ofstream out_file_1("preprocess.txt");
 		out_file_1 << res_temp;
@@ -737,623 +737,727 @@ namespace leksanalyz {
 
 
 	}
-	
-	//лексический анализ
 
-private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
+		   //лексический анализ
 
-	std::map<std::string, std::string> map_keywords;//словарь с ключевыми словами
-	std::map<std::string, std::string> map_identifiers;//словарь с идентификаторами
-	std::map<std::string, std::string> map_constants;//словарь с константами
-	std::map<std::string, std::string> map_op_sign;//словарь со знаками операций
-	std::map<std::string, std::string> map_comp_sign;//словарь со знаками сравнения
-	std::map<std::string, std::string> map_separator_sign;//словарь с разделителями
+	private: System::Void leks_Click(System::Object^ sender, System::EventArgs^ e) {
 
-
-	//чистка таблиц
-	clear_table();
+		std::map<std::string, std::string> map_keywords;//словарь с ключевыми словами
+		std::map<std::string, std::string> map_identifiers;//словарь с идентификаторами
+		std::map<std::string, std::string> map_constants;//словарь с константами
+		std::map<std::string, std::string> map_op_sign;//словарь со знаками операций
+		std::map<std::string, std::string> map_comp_sign;//словарь со знаками сравнения
+		std::map<std::string, std::string> map_separator_sign;//словарь с разделителями
 
 
-	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
-	String^ code = source_code_file->ReadToEnd();
-	source_code_file->Close();
-	
-	enum state {begin, identifier, constant, str_constant, op_sign, comp_sign,  error} st;
-	st = begin;
+		//чистка таблиц
+		clear_table();
 
-	//определяем идентификаторы и константы
-	std::string word; //сюда пишем обработанную лексему
 
-	int cnt_identifiers = 0, cnt_keywords = 0, cnt_consts = 0, cnt_op_sign = 0, cnt_comp_sign = 0, cnt_sep_sign = 0;
+		StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
+		String^ code = source_code_file->ReadToEnd();
+		source_code_file->Close();
 
-	for (int i = 0; i < code->Length; i++) {
-		
-		if (Char::IsLetter(code[i]) || code[i] == '_') {//обрабатываем символ
-			switch (st)
-			{
-			case begin:
-			case identifier:
-				word += code[i];
-				st = identifier;
-				break;
-			case constant:
-				word += code[i];
-				st = error;
-				break;
-			case str_constant:
-				word += code[i];
-				break;
-			case op_sign:
-				word += code[i];
-				st = identifier;
-				break;
-			case error:
-				word += code[i];
-				break;
+		enum state { begin, identifier, constant, str_constant, op_sign, comp_sign, error } st;
+		st = begin;
 
-			default:
-				break;
-			}
-			
-		}
-		else if (Char::IsDigit(code[i])) {//обрабатываем цифру
-			switch (st) {
-			case begin:
-			case constant:
-				word += code[i];
-				st = constant;
-				break;
+		//определяем идентификаторы и константы
+		std::string word; //сюда пишем обработанную лексему
 
-			case identifier:
-				word += code[i];
-				break;
+		int cnt_identifiers = 0, cnt_keywords = 0, cnt_consts = 0, cnt_op_sign = 0, cnt_comp_sign = 0, cnt_sep_sign = 0;
 
-			case op_sign:
-				word += code[i];
-				break;
+		for (int i = 0; i < code->Length; i++) {
 
-			case error:
-				word += code[i];
-				break;
+			if (Char::IsLetter(code[i]) || code[i] == '_') {//обрабатываем символ
+				switch (st)
+				{
+				case begin:
+				case identifier:
+					word += code[i];
+					st = identifier;
+					break;
+				case constant:
+					word += code[i];
+					st = error;
+					break;
+				case str_constant:
+					word += code[i];
+					break;
+				case op_sign:
+					word += code[i];
+					st = identifier;
+					break;
+				case error:
+					word += code[i];
+					break;
 
-			default:
-				break;
-			}
-		}
-		else if (code[i] == '<' || code[i] == '>' || (code[i] == '=' && code[i + 1] == '=')) {//обработка знаков сравнения
-			switch (st)
-			{
-			case begin:
-				word += code[i];
-				st = comp_sign;
-				break;
-			case identifier:
-				word += code[i];
-				break;
-			case constant:
-				word += code[i];
-				st = error;
-				break;
-			case op_sign:
-				word += code[i];
-				st = error;
-				break;
-			case comp_sign:
-				word += code[i];
-				break;
-			case error:
-				word += code[i];
-				break;
-			default:
-				break;
-			}
-
-		}
-		else if (code[i] == '=' || code[i] == '+' || code[i] == '-' || code[i] == '/' || code[i] == '*') {//обработка знаков операций
-			switch (st) {
-			case begin:
-			case op_sign:
-				word += code[i];
-				st = op_sign;
-				break;
-			case identifier:
-				word += code[i];
-				st = identifier;
-				break;
-			case constant:
-				word += code[i];
-				st = error;
-				break;
-			case comp_sign:
-				word += code[i];
-				break;
-			case error:
-				word += code[i];
-				break;
-
-			default:
-				break;
-			}
-
-		}
-		else if(code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
-
-			if (code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {
-				std::cout << "separator: " << code[i];
-				std::string c_str; c_str.push_back(code[i]);//Для перевода из String^ в std::string
-				map_separator_sign[c_str] = code[i];
-
-				
-			}
-
-			
-			switch (st)
-			{
-			case begin:
-				if (code[i] == '"') {
-					st = str_constant;
-				}
-				break;
-				
-			//состояние идентификатора - определяем ключевое слово или просто идентификатор
-			case identifier:
-	
-				
-				//проверка keywords
-				if (word == "auto" || word == "break" || word == "case" || word == "char" || word == "const" || word == "auto"\
-					|| word == "continue" || word == "default" || word == "do" || word == "double" || word == "else" || word == "enum"\
-					|| word == "extern" || word == "float" || word == "for" || word == "goto" || word == "if" || word == "int"\
-					|| word == "long" || word == "register" || word == "return" || word == "short" || word == "signed" \
-					|| word == "sizeof" || word == "static" || word == "struct" || word == "switch" || word == "typedef"\
-					|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while" || word == "string") {
-					st = begin;
-					std::cout << "keyword: " << word << '\n';
-					map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
+				default:
 					break;
 				}
 
-
-
-				st = begin;
-				std::cout << "identifier: " << word << '\n';
-
-				//кидаем в мапу с идентификаторами
-				map_identifiers[word] = "id";
-				
-				
-				break;
-
-			//состояние константы - проверяем без ошибок ли написано число
-			case constant:
-				st = begin;
-				std::cout << "constanta: " << word << '\n';
-				//запись в мапу констант
-				map_constants[word] = "number";
-
-				break;
-
-			//строковая константа
-			case str_constant:
-				st = begin;
-				std::cout << "str_const: " << word << '\n';
-				map_constants[word] = "string";
-				break;
-				
-
-			//состояние знака операции
-			case op_sign:
-				st = begin;
-				std::cout << "op_sign: " << word << '\n';
-				//запись в мапу map_op_sign
-				map_op_sign[word] = word;
-
-				break;
-
-			//Знак сравнения
-			case comp_sign:
-				st = begin;
-				std::cout << "comp_sign: " << word << '\n';
-				//запись в мапу map_comp_sign
-				map_comp_sign[word] = word;
-
-				break;
-
-			//состояние ошибки - выводим идентификатор в котором допущена ошибка
-			case error:
-				std::cout << "Error: " << word << '\n';
-				st = begin;
-
-				break;
-
-			default:
-				st = begin;
-				break;
 			}
-			word = "";//очищаем для следующего слова
-			
-		}
-
-	}
-
-	//теперь из мап пишем в таблицу
-	for (auto a : map_keywords) {
-		String^ leksema = gcnew String(a.first.c_str());
-		String^ code_leks = gcnew String(a.second.c_str());
-		this->keywords->Rows->Add(cnt_keywords++,leksema, code_leks);
-	}
-	for (auto a : map_identifiers) {
-		String^ identifier = gcnew String(a.first.c_str());
-		String^ code_identifier = gcnew String(a.second.c_str());
-		this->identifiers->Rows->Add(cnt_identifiers++, identifier, code_identifier);
-	}
-	for (auto a : map_constants) {
-		String^ constanta = gcnew String(a.first.c_str());
-		String^ code_identifier = gcnew String(a.second.c_str());
-		this->constants->Rows->Add(cnt_consts++, constanta, code_identifier);
-	}
-	for (auto a : map_op_sign) {
-		String^ sign = gcnew String(a.first.c_str());
-		String^ code_sign = gcnew String(a.second.c_str());
-		this->op_sign->Rows->Add(cnt_op_sign++, sign, code_sign);
-	}
-	for (auto a : map_comp_sign) {
-		String^ comp_sign = gcnew String(a.first.c_str());
-		String^ code_comp_sign = gcnew String(a.second.c_str());
-		this->comp_sign->Rows->Add(cnt_comp_sign++, comp_sign, code_comp_sign);
-	}
-	for (auto a : map_separator_sign) {
-		String^ sep_sign = gcnew String(a.first.c_str());
-		String^ code_sep_sign = gcnew String(a.second.c_str());
-		this->separators->Rows->Add(cnt_sep_sign++, sep_sign, code_sep_sign);
-	}
-	
-
-
-}
-
-
-public: std::vector<my_token::token>* tokens;
-
-///пишем дескрипторный код
-private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
-	tokens = new std::vector<my_token::token>;//вектор с токенами
-	this->descriptive_code->Clear();
-
-
-	StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
-	String^ code = source_code_file->ReadToEnd();
-	source_code_file->Close();
-
-	enum state { begin, keyword, identifier, constant, op_sign, comp_sign, error } st;
-	enum temp_state {S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14} tmp_st;
-	st = begin; tmp_st = S0;
-
-	//определяем идентификаторы и константы
-	std::string word = ""; //сюда пишем обработанную лексему
-
-	for (int i = 0; i < code->Length; i++) {
-
-		//пришла буква
-		if (Char::IsLetter(code[i]) || code[i] == '_') {
-
-			switch (tmp_st)
-			{
-			case S0:
-				tmp_st = S1;   //состояние идентификатора
-				if (code[i] == 'i') {
-					tmp_st = S2;
-				}
-				else if (code[i] == 'c') {
-					tmp_st = S11;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-			case S1:	 //состояние идентификатора
-				word += code[i];
-				break;
-			case S2:
-				if (code[i] == 'n') {
-					tmp_st = S3;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-			case S3:
-				if (code[i] == 't') {
-					tmp_st = S4;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-
-			case S11:
-				if (code[i] == 'h') {
-					tmp_st = S12;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-			case S12:
-				if (code[i] == 'a') {
-					tmp_st = S13;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-			case S13:
-				if (code[i] == 'r') {
-					tmp_st = S14;
-				}
-				else {
-					tmp_st = S1;
-				}
-				word += code[i];
-				break;
-
-			case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
-				word += code[i];
-				st = error;
-				break;
-			case S6://были на знаке операции и пришла буква - непорядок
-				word += code[i];
-				st = error;
-				break;
-			case S7://знаки сравнения а пришла буква - непорядок, пишем в ошибку
-			case S8:
-				word += code[i];
-				st = error;
-				break;
-			default:
-				break;
-			}
-		}
-		//пришла цифра
-		if (Char::IsDigit(code[i])) {
-			switch (tmp_st)
-			{
-			case S0://начало
-				tmp_st = S5;
-				word += code[i];
-				break;
-			case S5://константа
-				word += code[i];
-				break;
-			case S6://знак операции - пусть вводят разделитель
-				word += code[i];
-				st = error;
-				break;
-			case S7:
-			case S8://знак сравения - нужен разделитель
-				word += code[i];
-				st = error;
-				break;
-			default:
-				break;
-			}
-		}
-		//пришел знак операции
-		if (code[i] == '+' || code[i] == '-' || code[i] == '*' || code[i] == '/' || code[i] == '=') {
-			switch (tmp_st)
-			{
-			case S0:
-				tmp_st = S6;//знак операции
-				word += code[i];
-				break;
-			case S6://второй раз знак = значит это сравнение - S7
-				if (code[i] == '=') {
-					tmp_st = S7;
+			else if (Char::IsDigit(code[i])) {//обрабатываем цифру
+				switch (st) {
+				case begin:
+				case constant:
 					word += code[i];
-				}
-				break;
-			case S8://приходит = после < или >
-				if (code[i] == '=') {
-					tmp_st = S7;
-					word += code[i];
-				}
-				break;
-			default://во всех случаях кроме после разделителя
-				st = error;
-				word += code[i];
-				break;
-			}
-		}
-		if (code[i] == '<' || code[i] == '>') {
-			switch (tmp_st)
-			{
-			case S0:
-				tmp_st = S8;//знак сравнения
-				word += code[i];
-				break;
-			default:
-				st = error;
-				word += code[i];
-				break;
-			}
-		}
-		//пришел разделитель
-		if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {
-
-			//определяем что за лексема
-			switch (tmp_st) {
-			case S1:
-				st = identifier;//распознали идентификатор
-				break;
-			case S4://int
-				st = keyword;//распознали int и 
-				break;
-			case S14://char
-				st = keyword;//распознали char и 
-				break;
-			case S5:
-				if (st != error) {//распознали константу без ошибок
 					st = constant;
+					break;
+
+				case identifier:
+					word += code[i];
+					break;
+
+				case op_sign:
+					word += code[i];
+					break;
+
+				case error:
+					word += code[i];
+					break;
+
+				default:
+					break;
 				}
-				break;
-			case S6:
-				st = op_sign;//знак операции
-				break;
-			case S7://знак == <= >=
-				st = comp_sign;
-				break;
-			case S8://знаки < or >
-				st = comp_sign;
-				break;
-			default:
-				st = identifier;
-				break;
 			}
-
-			//пишем дескрипторный код
-			String^ leksema = gcnew String(word.c_str());//лексема 
-			
-
-			String^ number_table;
-
-			int num_table, num_record;
-
-			switch (st) {
-				//ключевые слова
-			case keyword:
-				number_table = "1";//номер таблицы с ключевыми словами
-
-				//ищем совпадения в таблице с лексемой и записываем токен(номер таблицы + номер записи)
-				for each (DataGridViewRow ^ row in this->keywords->Rows) {
-
-					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-
-						std::cout << "FIND KEYWORD!\n";
-
-						num_table = Int32::Parse(number_table->ToString());
-						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-						my_token::token tok{num_table, num_record};
-						tokens->push_back(tok);
-					}
-
-				}
-				break;
-
-				//идентификаторы
-			case identifier:
-				number_table = "2";
-				for each (DataGridViewRow ^ row in this->identifiers->Rows) {
-					
-					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						
-						std::cout << "FIND IDENTIFIER!\n";
-
-						//запись в вектор
-						num_table = Int32::Parse(number_table->ToString());
-						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-						my_token::token tok{ num_table, num_record };
-						tokens->push_back(tok);
-					}
-
-				}
-				break;
-
-				//константы
-			case constant:
-				number_table = "3";
-				for each (DataGridViewRow ^ row in this->constants->Rows) {
-					
-					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						
-						std::cout << "FIND CONSTANTA!\n";
-						//запись в вектор токенов
-						num_table = Int32::Parse(number_table->ToString());
-						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-						my_token::token tok{ num_table, num_record };
-						tokens->push_back(tok);
-					}
-					
-				}
-				break;
-				
-				//знаки операций
-			case op_sign:
-				number_table = "4";
-				for each(DataGridViewRow ^ row in this->op_sign->Rows) {
-
-					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						
-						std::cout << "FIND OP_SIGN!\n";
-						//запись в вектор токенов
-						num_table = Int32::Parse(number_table->ToString());
-						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-						my_token::token tok{ num_table, num_record };
-						tokens->push_back(tok);
-					}
-
-				}
-				break;
-
-				//знаки сравнения
-			case comp_sign:
-				number_table = "5";
-				for each (DataGridViewRow ^ row in this->comp_sign->Rows) {
-
-					if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
-						
-						std::cout << "FIND COMP_SIGN!\n";
-						//запись в вектор токенов
-						num_table = Int32::Parse(number_table->ToString());
-						num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-						my_token::token tok{ num_table, num_record };
-						tokens->push_back(tok);
-					}
-
-				}
-				break;
-
-				//ошибки
-			case error:
-				std::cout << "ERRROR: " << word << '\n';
-				break;
-
-			}
-
-			//пишем сам разделитель в дескр. код
-			for each(DataGridViewRow ^ row in this->separators->Rows) {
-				number_table = "6";
-				if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString(code[i]))) {
-
-					std::cout << "FIND SEP_SIGN!\n";
-					//запись в вектор токенов
-					num_table = Int32::Parse(number_table->ToString());
-					num_record = Int32::Parse(row->Cells[0]->Value->ToString());
-					my_token::token tok{ num_table, num_record };
-					tokens->push_back(tok);
+			else if (code[i] == '<' || code[i] == '>' || (code[i] == '=' && code[i + 1] == '=')) {//обработка знаков сравнения
+				switch (st)
+				{
+				case begin:
+					word += code[i];
+					st = comp_sign;
+					break;
+				case identifier:
+					word += code[i];
+					break;
+				case constant:
+					word += code[i];
+					st = error;
+					break;
+				case op_sign:
+					word += code[i];
+					st = error;
+					break;
+				case comp_sign:
+					word += code[i];
+					break;
+				case error:
+					word += code[i];
+					break;
+				default:
+					break;
 				}
 
 			}
+			else if (code[i] == '=' || code[i] == '+' || code[i] == '-' || code[i] == '/' || code[i] == '*') {//обработка знаков операций
+				switch (st) {
+				case begin:
+				case op_sign:
+					word += code[i];
+					st = op_sign;
+					break;
+				case identifier:
+					word += code[i];
+					st = identifier;
+					break;
+				case constant:
+					word += code[i];
+					st = error;
+					break;
+				case comp_sign:
+					word += code[i];
+					break;
+				case error:
+					word += code[i];
+					break;
+
+				default:
+					break;
+				}
+
+			}
+			else if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
+
+				//запись в мапу разделителей
+				if (code[i] == ' ') {
+					std::cout << "separator( space ): " << code[i];
+					std::string c_str = "space";
+					map_separator_sign[c_str] = "space";
+				}
+				else if (code[i] == '\n') {
+					std::cout << "separator(\\n): " << code[i];
+					std::string c_str = "\\n";
+					map_separator_sign[c_str] = "\\n";
+				}
+				else {
+					std::cout << "separator: " << code[i];
+					std::string c_str; c_str.push_back(code[i]);
+					map_separator_sign[c_str] = code[i];
+				}
 
 
-			//очищаем лексему и обнуляем состояния
-			word = "";
-			st = begin;
-			tmp_st = S0;
+
+				switch (st)
+				{
+				case begin:
+					if (code[i] == '"') {
+						st = str_constant;
+					}
+					break;
+
+					//состояние идентификатора - определяем ключевое слово или просто идентификатор
+				case identifier:
+
+
+					//проверка keywords
+					if (word == "auto" || word == "break" || word == "case" || word == "char" || word == "const" || word == "auto"\
+						|| word == "continue" || word == "default" || word == "do" || word == "double" || word == "else" || word == "enum"\
+						|| word == "extern" || word == "float" || word == "for" || word == "goto" || word == "if" || word == "int"\
+						|| word == "long" || word == "register" || word == "return" || word == "short" || word == "signed" \
+						|| word == "sizeof" || word == "static" || word == "struct" || word == "switch" || word == "typedef"\
+						|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while" || word == "string") {
+						st = begin;
+						std::cout << "keyword: " << word << '\n';
+						map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
+						break;
+					}
+
+
+
+					st = begin;
+					std::cout << "identifier: " << word << '\n';
+
+					//кидаем в мапу с идентификаторами
+					map_identifiers[word] = "id";
+
+
+					break;
+
+					//состояние константы - проверяем без ошибок ли написано число
+				case constant:
+					st = begin;
+					std::cout << "constanta: " << word << '\n';
+					//запись в мапу констант
+					map_constants[word] = "number";
+
+					break;
+
+					//строковая константа
+				case str_constant:
+					st = begin;
+					std::cout << "str_const: " << word << '\n';
+					map_constants[word] = "string";
+					break;
+
+
+					//состояние знака операции
+				case op_sign:
+					st = begin;
+					std::cout << "op_sign: " << word << '\n';
+					//запись в мапу map_op_sign
+					map_op_sign[word] = word;
+
+					break;
+
+					//Знак сравнения
+				case comp_sign:
+					st = begin;
+					std::cout << "comp_sign: " << word << '\n';
+					//запись в мапу map_comp_sign
+					map_comp_sign[word] = word;
+
+					break;
+
+					//состояние ошибки - выводим идентификатор в котором допущена ошибка
+				case error:
+					std::cout << "Error: " << word << '\n';
+					st = begin;
+
+					break;
+
+				default:
+					st = begin;
+					break;
+				}
+				word = "";//очищаем для следующего слова
+
+			}
+
+		}
+
+		//теперь из мап пишем в таблицу
+		for (auto a : map_keywords) {
+			String^ leksema = gcnew String(a.first.c_str());
+			String^ code_leks = gcnew String(a.second.c_str());
+			this->keywords->Rows->Add(cnt_keywords++, leksema, code_leks);
+		}
+		for (auto a : map_identifiers) {
+			String^ identifier = gcnew String(a.first.c_str());
+			String^ code_identifier = gcnew String(a.second.c_str());
+			this->identifiers->Rows->Add(cnt_identifiers++, identifier, code_identifier);
+		}
+		for (auto a : map_constants) {
+			String^ constanta = gcnew String(a.first.c_str());
+			String^ code_identifier = gcnew String(a.second.c_str());
+			this->constants->Rows->Add(cnt_consts++, constanta, code_identifier);
+		}
+		for (auto a : map_op_sign) {
+			String^ sign = gcnew String(a.first.c_str());
+			String^ code_sign = gcnew String(a.second.c_str());
+			this->op_sign->Rows->Add(cnt_op_sign++, sign, code_sign);
+		}
+		for (auto a : map_comp_sign) {
+			String^ comp_sign = gcnew String(a.first.c_str());
+			String^ code_comp_sign = gcnew String(a.second.c_str());
+			this->comp_sign->Rows->Add(cnt_comp_sign++, comp_sign, code_comp_sign);
+		}
+		for (auto a : map_separator_sign) {
+			String^ sep_sign = gcnew String(a.first.c_str());
+			String^ code_sep_sign = gcnew String(a.second.c_str());
+			this->separators->Rows->Add(cnt_sep_sign++, sep_sign, code_sep_sign);
 		}
 
 
-	}
-	//пишем дескрипторный код идя по токенам из вектора
-	for (auto i : *tokens) {
-		this->descriptive_code->Text += "[" + i.num_table + "," + i.num_record + "] ";
+
 	}
 
-}
-};
+
+	public: std::vector<my_token::token>* tokens;
+
+		  ///пишем дескрипторный код
+	private: System::Void make_descr_code_Click(System::Object^ sender, System::EventArgs^ e) {
+		tokens = new std::vector<my_token::token>;//вектор с токенами
+		this->descriptive_code->Clear();
+
+
+		StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
+		String^ code = source_code_file->ReadToEnd();
+		source_code_file->Close();
+
+		enum state { begin, keyword, identifier, constant, op_sign, comp_sign, separator, error } st;
+		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
+		st = begin; tmp_st = S0;
+
+		//определяем идентификаторы и константы
+		std::string word = ""; //сюда пишем обработанную лексему
+
+		for (int i = 0; i < code->Length; i++) {
+
+			//пришла буква
+			if (Char::IsLetter(code[i]) || code[i] == '_') {
+
+				switch (tmp_st)
+				{
+				case S0:
+					tmp_st = S1;   //состояние идентификатора
+					switch (code[i]) {//первые буквы ключевых слов
+					case 'i':
+						tmp_st = S2;
+						break;
+					case 'c':
+						tmp_st = S11;
+						break;
+					case 'd':
+						tmp_st = S15;
+						break;
+					default:
+						tmp_st = S1;
+						break;
+					}
+					word += code[i];
+					break;
+				case S1:	 //состояние идентификатора
+					word += code[i];
+					break;
+				case S2:
+					if (code[i] == 'n') {
+						tmp_st = S3;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S3:
+					if (code[i] == 't') {
+						tmp_st = S4;//состояние последнего символа ключ слова int
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+
+				case S11:
+					if (code[i] == 'h') {
+						tmp_st = S12;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S12:
+					if (code[i] == 'a') {
+						tmp_st = S13;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S13:
+					if (code[i] == 'r') {
+						tmp_st = S14;//состояние последнего символа ключ слова char
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S15:
+					if (code[i] == 'o') {
+						tmp_st = S16;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S16:
+					if (code[i] == 'u') {
+						tmp_st = S17;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S17:
+					if (code[i] == 'b') {
+						tmp_st = S18;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S18:
+					if (code[i] == 'l') {
+						tmp_st = S19;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S19:
+					if (code[i] == 'e') {
+						tmp_st = S20;//состояние последнего символа ключ слова double
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
+					word += code[i];
+					st = error;
+					break;
+				case S6://были на знаке операции и пришла буква - непорядок
+					word += code[i];
+					st = error;
+					break;
+				case S7://знаки сравнения а пришла буква - непорядок, пишем в ошибку
+				case S8:
+					word += code[i];
+					st = error;
+					break;
+				default:
+					break;
+				}
+			}
+			//пришла цифра
+			if (Char::IsDigit(code[i])) {
+				switch (tmp_st)
+				{
+				case S0://начало
+					tmp_st = S5;
+					word += code[i];
+					break;
+				case S5://константа
+					word += code[i];
+					break;
+				case S6://знак операции - пусть вводят разделитель
+					word += code[i];
+					st = error;
+					break;
+				case S7:
+				case S8://знак сравения - нужен разделитель
+					word += code[i];
+					st = error;
+					break;
+				default:
+					break;
+				}
+			}
+			//пришел знак операции
+			if (code[i] == '+' || code[i] == '-' || code[i] == '*' || code[i] == '/' || code[i] == '=') {
+				switch (tmp_st)
+				{
+				case S0:
+					tmp_st = S6;//знак операции
+					word += code[i];
+					break;
+				case S6://второй раз знак = значит это сравнение - S7
+					if (code[i] == '=') {
+						tmp_st = S7;
+						word += code[i];
+					}
+					break;
+				case S8://приходит = после < или >
+					if (code[i] == '=') {
+						tmp_st = S7;
+						word += code[i];
+					}
+					break;
+				default://во всех случаях кроме после разделителя
+					st = error;
+					word += code[i];
+					break;
+				}
+			}
+			if (code[i] == '<' || code[i] == '>') {
+				switch (tmp_st)
+				{
+				case S0:
+					tmp_st = S8;//знак сравнения
+					word += code[i];
+					break;
+				default:
+					st = error;
+					word += code[i];
+					break;
+				}
+			}
+			//пришел разделитель
+			if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {
+
+				//определяем что за лексема
+				switch (tmp_st) {
+				case S0://распознали разделитель
+					st = separator;
+					break;
+				case S1:
+					st = identifier;//распознали идентификатор
+					break;
+				case S4://int
+					st = keyword;
+					break;
+				case S14://char
+					st = keyword;
+					break;
+				case S20://double
+					st = keyword;
+					break;
+				case S5:
+					if (st != error) {//распознали константу без ошибок
+						st = constant;
+					}
+					break;
+				case S6:
+					st = op_sign;//знак операции
+					break;
+				case S7://знак == <= >=
+					st = comp_sign;
+					break;
+				case S8://знаки < or >
+					st = comp_sign;
+					break;
+				default:
+					st = identifier;
+					break;
+				}
+
+				//пишем дескрипторный код
+				String^ leksema = gcnew String(word.c_str());//лексема 
+
+
+				String^ number_table;
+
+				int num_table, num_record;
+
+				switch (st) {
+					//ключевые слова
+				case keyword:
+					number_table = "1";//номер таблицы с ключевыми словами
+
+					//ищем совпадения в таблице с лексемой и записываем токен(номер таблицы + номер записи)
+					for each (DataGridViewRow ^ row in this->keywords->Rows) {
+
+						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+
+							std::cout << "FIND KEYWORD!\n";
+
+							num_table = Int32::Parse(number_table->ToString());
+							num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+							my_token::token tok{ num_table, num_record };
+							tokens->push_back(tok);
+						}
+
+					}
+					i--;//чтобы откатиться и распознать разделитель
+
+					break;
+
+					//идентификаторы
+				case identifier:
+					number_table = "2";
+					for each (DataGridViewRow ^ row in this->identifiers->Rows) {
+
+						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+
+							std::cout << "FIND IDENTIFIER!\n";
+
+							//запись в вектор
+							num_table = Int32::Parse(number_table->ToString());
+							num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+							my_token::token tok{ num_table, num_record };
+							tokens->push_back(tok);
+						}
+
+					}
+					i--;//чтобы откатиться и распознать разделитель
+					break;
+
+					//константы
+				case constant:
+					number_table = "3";
+					for each (DataGridViewRow ^ row in this->constants->Rows) {
+
+						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+
+							std::cout << "FIND CONSTANTA!\n";
+							//запись в вектор токенов
+							num_table = Int32::Parse(number_table->ToString());
+							num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+							my_token::token tok{ num_table, num_record };
+							tokens->push_back(tok);
+						}
+					}
+					i--;//чтобы откатиться и распознать разделитель
+					break;
+
+					//знаки операций
+				case op_sign:
+					number_table = "4";
+					for each (DataGridViewRow ^ row in this->op_sign->Rows) {
+
+						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+
+							std::cout << "FIND OP_SIGN!\n";
+							//запись в вектор токенов
+							num_table = Int32::Parse(number_table->ToString());
+							num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+							my_token::token tok{ num_table, num_record };
+							tokens->push_back(tok);
+						}
+
+					}
+					i--;//чтобы откатиться и распознать разделитель
+					break;
+
+					//знаки сравнения
+				case comp_sign:
+					number_table = "5";
+					for each (DataGridViewRow ^ row in this->comp_sign->Rows) {
+
+						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
+
+							std::cout << "FIND COMP_SIGN!\n";
+							//запись в вектор токенов
+							num_table = Int32::Parse(number_table->ToString());
+							num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+							my_token::token tok{ num_table, num_record };
+							tokens->push_back(tok);
+						}
+
+					}
+					i--;//чтобы откатиться и распознать разделитель
+
+					break;
+
+					//разделитель
+				case separator:
+					//пишем сам разделитель в дескр. код
+					number_table = "6";
+					if (code[i] == ' ') {//эта чухня потому что в таблице пробелы и переносы записаны словами а не просто символом(иначе их не видно:(()
+						for each (DataGridViewRow ^ row in this->separators->Rows) {
+							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString("space"))) {
+
+								std::cout << "FIND SEP_SIGN!\n";
+								//запись в вектор токенов
+								num_table = Int32::Parse(number_table->ToString());
+								num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+								my_token::token tok{ num_table, num_record };
+								tokens->push_back(tok);
+							}
+						}
+	
+					}
+					else if (code[i] == '\n') {//эта чухня потому что в таблице пробелы и переносы записаны словами а не просто символом(иначе их не видно:(()
+						for each (DataGridViewRow ^ row in this->separators->Rows) {
+							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString("\\n"))) {
+
+								std::cout << "FIND SEP_SIGN!\n";
+								//запись в вектор токенов
+								num_table = Int32::Parse(number_table->ToString());
+								num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+								my_token::token tok{ num_table, num_record };
+								tokens->push_back(tok);
+							}
+						}
+
+					}
+					else {
+						for each (DataGridViewRow ^ row in this->separators->Rows) {
+
+							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString(code[i]))) {
+
+								std::cout << "FIND SEP_SIGN!\n";
+								//запись в вектор токенов
+								num_table = Int32::Parse(number_table->ToString());
+								num_record = Int32::Parse(row->Cells[0]->Value->ToString());
+								my_token::token tok{ num_table, num_record };
+								tokens->push_back(tok);
+							}
+
+						}
+					}
+					break;
+
+					//ошибки
+				case error:
+					std::cout << "ERRROR: " << word << '\n';
+					break;
+
+				}
+
+				//очищаем лексему и обнуляем состояния
+				word = "";
+				st = begin;
+				tmp_st = S0;
+			}
+
+
+		}
+		//пишем дескрипторный код идя по токенам из вектора
+		for (auto i : *tokens) {
+			this->descriptive_code->Text += "[" + i.num_table + "," + i.num_record + "] ";
+		}
+
+	}
+	};
 }
 
 
