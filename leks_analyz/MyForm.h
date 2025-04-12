@@ -26,11 +26,14 @@ namespace leksanalyz {
 
 
 
+
 	/// <summary>
 	/// Summary for MyForm
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
+		
+
 	public:
 		MyForm(void)
 		{
@@ -68,7 +71,8 @@ namespace leksanalyz {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ count_lines;
 	private: System::Windows::Forms::Button^ leks;
-	private: System::Windows::Forms::DataGridView^ keywords;
+	private: System::Windows::Forms::DataGridView^ keywords_table;
+
 
 
 
@@ -79,33 +83,40 @@ namespace leksanalyz {
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ num;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Leksema;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ Code;
-	private: System::Windows::Forms::DataGridView^ identifiers;
+	private: System::Windows::Forms::DataGridView^ identifiers_table;
+
 
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn1;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn2;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn3;
 	private: System::Windows::Forms::Label^ label3;
 	private: System::Windows::Forms::Label^ label4;
-	private: System::Windows::Forms::DataGridView^ constants;
+	private: System::Windows::Forms::DataGridView^ constants_table;
+
 
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn4;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn5;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn6;
 	private: System::Windows::Forms::Label^ label5;
-	private: System::Windows::Forms::DataGridView^ op_sign;
+	private: System::Windows::Forms::DataGridView^ operation_sign_table;
+
+
 
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn7;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn8;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn9;
 	private: System::Windows::Forms::Label^ label6;
 	private: System::Windows::Forms::Label^ label7;
-	private: System::Windows::Forms::DataGridView^ comp_sign;
+	private: System::Windows::Forms::DataGridView^ compare_sign_table;
+
+
 
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn10;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn11;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn12;
 	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::DataGridView^ separators;
+	private: System::Windows::Forms::DataGridView^ separators_table;
+
 
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn13;
 	private: System::Windows::Forms::DataGridViewTextBoxColumn^ dataGridViewTextBoxColumn14;
@@ -142,45 +153,45 @@ namespace leksanalyz {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->count_lines = (gcnew System::Windows::Forms::Label());
 			this->leks = (gcnew System::Windows::Forms::Button());
-			this->keywords = (gcnew System::Windows::Forms::DataGridView());
+			this->keywords_table = (gcnew System::Windows::Forms::DataGridView());
 			this->num = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Leksema = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->Code = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->identifiers = (gcnew System::Windows::Forms::DataGridView());
+			this->identifiers_table = (gcnew System::Windows::Forms::DataGridView());
 			this->dataGridViewTextBoxColumn1 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn2 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn3 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
-			this->constants = (gcnew System::Windows::Forms::DataGridView());
+			this->constants_table = (gcnew System::Windows::Forms::DataGridView());
 			this->dataGridViewTextBoxColumn4 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn5 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn6 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label5 = (gcnew System::Windows::Forms::Label());
-			this->op_sign = (gcnew System::Windows::Forms::DataGridView());
+			this->operation_sign_table = (gcnew System::Windows::Forms::DataGridView());
 			this->dataGridViewTextBoxColumn7 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn8 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn9 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label6 = (gcnew System::Windows::Forms::Label());
 			this->label7 = (gcnew System::Windows::Forms::Label());
-			this->comp_sign = (gcnew System::Windows::Forms::DataGridView());
+			this->compare_sign_table = (gcnew System::Windows::Forms::DataGridView());
 			this->dataGridViewTextBoxColumn10 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn11 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn12 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->separators = (gcnew System::Windows::Forms::DataGridView());
+			this->separators_table = (gcnew System::Windows::Forms::DataGridView());
 			this->dataGridViewTextBoxColumn13 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn14 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->dataGridViewTextBoxColumn15 = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->descriptive_code = (gcnew System::Windows::Forms::TextBox());
 			this->make_descr_code = (gcnew System::Windows::Forms::Button());
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->op_sign))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->comp_sign))->BeginInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separators))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords_table))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers_table))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants_table))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->operation_sign_table))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->compare_sign_table))->BeginInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separators_table))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// input_box
@@ -256,22 +267,22 @@ namespace leksanalyz {
 			this->leks->UseVisualStyleBackColor = true;
 			this->leks->Click += gcnew System::EventHandler(this, &MyForm::leks_Click);
 			// 
-			// keywords
+			// keywords_table
 			// 
-			this->keywords->AllowUserToAddRows = false;
-			this->keywords->AllowUserToDeleteRows = false;
-			this->keywords->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->keywords->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->keywords_table->AllowUserToAddRows = false;
+			this->keywords_table->AllowUserToDeleteRows = false;
+			this->keywords_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->keywords_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->num, this->Leksema,
 					this->Code
 			});
-			this->keywords->Location = System::Drawing::Point(31, 420);
-			this->keywords->Margin = System::Windows::Forms::Padding(4);
-			this->keywords->Name = L"keywords";
-			this->keywords->ReadOnly = true;
-			this->keywords->RowHeadersWidth = 51;
-			this->keywords->Size = System::Drawing::Size(367, 185);
-			this->keywords->TabIndex = 7;
+			this->keywords_table->Location = System::Drawing::Point(31, 420);
+			this->keywords_table->Margin = System::Windows::Forms::Padding(4);
+			this->keywords_table->Name = L"keywords_table";
+			this->keywords_table->ReadOnly = true;
+			this->keywords_table->RowHeadersWidth = 51;
+			this->keywords_table->Size = System::Drawing::Size(367, 185);
+			this->keywords_table->TabIndex = 7;
 			// 
 			// num
 			// 
@@ -297,22 +308,22 @@ namespace leksanalyz {
 			this->Code->ReadOnly = true;
 			this->Code->Width = 125;
 			// 
-			// identifiers
+			// identifiers_table
 			// 
-			this->identifiers->AllowUserToAddRows = false;
-			this->identifiers->AllowUserToDeleteRows = false;
-			this->identifiers->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->identifiers->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->identifiers_table->AllowUserToAddRows = false;
+			this->identifiers_table->AllowUserToDeleteRows = false;
+			this->identifiers_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->identifiers_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->dataGridViewTextBoxColumn1,
 					this->dataGridViewTextBoxColumn2, this->dataGridViewTextBoxColumn3
 			});
-			this->identifiers->Location = System::Drawing::Point(427, 420);
-			this->identifiers->Margin = System::Windows::Forms::Padding(4);
-			this->identifiers->Name = L"identifiers";
-			this->identifiers->ReadOnly = true;
-			this->identifiers->RowHeadersWidth = 51;
-			this->identifiers->Size = System::Drawing::Size(365, 185);
-			this->identifiers->TabIndex = 8;
+			this->identifiers_table->Location = System::Drawing::Point(427, 420);
+			this->identifiers_table->Margin = System::Windows::Forms::Padding(4);
+			this->identifiers_table->Name = L"identifiers_table";
+			this->identifiers_table->ReadOnly = true;
+			this->identifiers_table->RowHeadersWidth = 51;
+			this->identifiers_table->Size = System::Drawing::Size(365, 185);
+			this->identifiers_table->TabIndex = 8;
 			// 
 			// dataGridViewTextBoxColumn1
 			// 
@@ -362,22 +373,22 @@ namespace leksanalyz {
 			this->label4->TabIndex = 10;
 			this->label4->Text = L"IDENTIFIERS(2)";
 			// 
-			// constants
+			// constants_table
 			// 
-			this->constants->AllowUserToAddRows = false;
-			this->constants->AllowUserToDeleteRows = false;
-			this->constants->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->constants->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->constants_table->AllowUserToAddRows = false;
+			this->constants_table->AllowUserToDeleteRows = false;
+			this->constants_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->constants_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->dataGridViewTextBoxColumn4,
 					this->dataGridViewTextBoxColumn5, this->dataGridViewTextBoxColumn6
 			});
-			this->constants->Location = System::Drawing::Point(839, 420);
-			this->constants->Margin = System::Windows::Forms::Padding(4);
-			this->constants->Name = L"constants";
-			this->constants->ReadOnly = true;
-			this->constants->RowHeadersWidth = 51;
-			this->constants->Size = System::Drawing::Size(365, 185);
-			this->constants->TabIndex = 11;
+			this->constants_table->Location = System::Drawing::Point(839, 420);
+			this->constants_table->Margin = System::Windows::Forms::Padding(4);
+			this->constants_table->Name = L"constants_table";
+			this->constants_table->ReadOnly = true;
+			this->constants_table->RowHeadersWidth = 51;
+			this->constants_table->Size = System::Drawing::Size(365, 185);
+			this->constants_table->TabIndex = 11;
 			// 
 			// dataGridViewTextBoxColumn4
 			// 
@@ -415,22 +426,22 @@ namespace leksanalyz {
 			this->label5->TabIndex = 12;
 			this->label5->Text = L"CONSTANTS(3)";
 			// 
-			// op_sign
+			// operation_sign_table
 			// 
-			this->op_sign->AllowUserToAddRows = false;
-			this->op_sign->AllowUserToDeleteRows = false;
-			this->op_sign->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->op_sign->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->operation_sign_table->AllowUserToAddRows = false;
+			this->operation_sign_table->AllowUserToDeleteRows = false;
+			this->operation_sign_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->operation_sign_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->dataGridViewTextBoxColumn7,
 					this->dataGridViewTextBoxColumn8, this->dataGridViewTextBoxColumn9
 			});
-			this->op_sign->Location = System::Drawing::Point(31, 664);
-			this->op_sign->Margin = System::Windows::Forms::Padding(4);
-			this->op_sign->Name = L"op_sign";
-			this->op_sign->ReadOnly = true;
-			this->op_sign->RowHeadersWidth = 51;
-			this->op_sign->Size = System::Drawing::Size(367, 185);
-			this->op_sign->TabIndex = 13;
+			this->operation_sign_table->Location = System::Drawing::Point(31, 664);
+			this->operation_sign_table->Margin = System::Windows::Forms::Padding(4);
+			this->operation_sign_table->Name = L"operation_sign_table";
+			this->operation_sign_table->ReadOnly = true;
+			this->operation_sign_table->RowHeadersWidth = 51;
+			this->operation_sign_table->Size = System::Drawing::Size(367, 185);
+			this->operation_sign_table->TabIndex = 13;
 			// 
 			// dataGridViewTextBoxColumn7
 			// 
@@ -467,7 +478,6 @@ namespace leksanalyz {
 			this->label6->Size = System::Drawing::Size(207, 25);
 			this->label6->TabIndex = 14;
 			this->label6->Text = L"OPERATION SIGN(4)";
-
 			// 
 			// label7
 			// 
@@ -481,22 +491,22 @@ namespace leksanalyz {
 			this->label7->TabIndex = 16;
 			this->label7->Text = L"COMPARE SIGN(5)";
 			// 
-			// comp_sign
+			// compare_sign_table
 			// 
-			this->comp_sign->AllowUserToAddRows = false;
-			this->comp_sign->AllowUserToDeleteRows = false;
-			this->comp_sign->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->comp_sign->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->compare_sign_table->AllowUserToAddRows = false;
+			this->compare_sign_table->AllowUserToDeleteRows = false;
+			this->compare_sign_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->compare_sign_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->dataGridViewTextBoxColumn10,
 					this->dataGridViewTextBoxColumn11, this->dataGridViewTextBoxColumn12
 			});
-			this->comp_sign->Location = System::Drawing::Point(427, 664);
-			this->comp_sign->Margin = System::Windows::Forms::Padding(4);
-			this->comp_sign->Name = L"comp_sign";
-			this->comp_sign->ReadOnly = true;
-			this->comp_sign->RowHeadersWidth = 51;
-			this->comp_sign->Size = System::Drawing::Size(367, 185);
-			this->comp_sign->TabIndex = 15;
+			this->compare_sign_table->Location = System::Drawing::Point(427, 664);
+			this->compare_sign_table->Margin = System::Windows::Forms::Padding(4);
+			this->compare_sign_table->Name = L"compare_sign_table";
+			this->compare_sign_table->ReadOnly = true;
+			this->compare_sign_table->RowHeadersWidth = 51;
+			this->compare_sign_table->Size = System::Drawing::Size(367, 185);
+			this->compare_sign_table->TabIndex = 15;
 			// 
 			// dataGridViewTextBoxColumn10
 			// 
@@ -534,22 +544,22 @@ namespace leksanalyz {
 			this->label8->TabIndex = 18;
 			this->label8->Text = L"SEPARATORS(6)";
 			// 
-			// separators
+			// separators_table
 			// 
-			this->separators->AllowUserToAddRows = false;
-			this->separators->AllowUserToDeleteRows = false;
-			this->separators->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->separators->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
+			this->separators_table->AllowUserToAddRows = false;
+			this->separators_table->AllowUserToDeleteRows = false;
+			this->separators_table->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			this->separators_table->Columns->AddRange(gcnew cli::array< System::Windows::Forms::DataGridViewColumn^  >(3) {
 				this->dataGridViewTextBoxColumn13,
 					this->dataGridViewTextBoxColumn14, this->dataGridViewTextBoxColumn15
 			});
-			this->separators->Location = System::Drawing::Point(838, 664);
-			this->separators->Margin = System::Windows::Forms::Padding(4);
-			this->separators->Name = L"separators";
-			this->separators->ReadOnly = true;
-			this->separators->RowHeadersWidth = 51;
-			this->separators->Size = System::Drawing::Size(367, 185);
-			this->separators->TabIndex = 17;
+			this->separators_table->Location = System::Drawing::Point(838, 664);
+			this->separators_table->Margin = System::Windows::Forms::Padding(4);
+			this->separators_table->Name = L"separators_table";
+			this->separators_table->ReadOnly = true;
+			this->separators_table->RowHeadersWidth = 51;
+			this->separators_table->Size = System::Drawing::Size(367, 185);
+			this->separators_table->TabIndex = 17;
 			// 
 			// dataGridViewTextBoxColumn13
 			// 
@@ -614,17 +624,17 @@ namespace leksanalyz {
 			this->Controls->Add(this->descriptive_code);
 			this->Controls->Add(this->label9);
 			this->Controls->Add(this->label8);
-			this->Controls->Add(this->separators);
+			this->Controls->Add(this->separators_table);
 			this->Controls->Add(this->label7);
-			this->Controls->Add(this->comp_sign);
+			this->Controls->Add(this->compare_sign_table);
 			this->Controls->Add(this->label6);
-			this->Controls->Add(this->op_sign);
+			this->Controls->Add(this->operation_sign_table);
 			this->Controls->Add(this->label5);
-			this->Controls->Add(this->constants);
+			this->Controls->Add(this->constants_table);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label3);
-			this->Controls->Add(this->identifiers);
-			this->Controls->Add(this->keywords);
+			this->Controls->Add(this->identifiers_table);
+			this->Controls->Add(this->keywords_table);
 			this->Controls->Add(this->leks);
 			this->Controls->Add(this->count_lines);
 			this->Controls->Add(this->label2);
@@ -635,12 +645,12 @@ namespace leksanalyz {
 			this->Margin = System::Windows::Forms::Padding(4);
 			this->Name = L"MyForm";
 			this->Text = L"Leks";
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->op_sign))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->comp_sign))->EndInit();
-			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separators))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords_table))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers_table))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants_table))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->operation_sign_table))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->compare_sign_table))->EndInit();
+			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->separators_table))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -754,12 +764,20 @@ namespace leksanalyz {
 		clear_table();
 
 
+
 		StreamReader^ source_code_file = gcnew StreamReader("source_code.txt");//читаем исходный код после препроцессинга
 		String^ code = source_code_file->ReadToEnd();
 		source_code_file->Close();
 
+		
+		//int , char , double, sizeof, float, class
+		
 		enum state { begin, keyword, identifier, constant, str_constant, op_sign, comp_sign, separator, error } st;
-		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
+		enum temp_state {
+			S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,
+			S21, S22, S23, S24, S25, S26, S27, S28, S29, S30, S31, S32, S33, S34, S35
+		} tmp_st;
+
 		st = begin; tmp_st = S0;
 
 		//определяем идентификаторы и константы
@@ -783,6 +801,12 @@ namespace leksanalyz {
 						break;
 					case 'd':
 						tmp_st = S15;
+						break;
+					case 's' :
+						tmp_st = S21;
+						break;
+					case 'f':
+						tmp_st = S27;
 						break;
 					default:
 						tmp_st = S1;
@@ -815,6 +839,9 @@ namespace leksanalyz {
 				case S11:
 					if (code[i] == 'h') {
 						tmp_st = S12;
+					}
+					else if (code[i] == 'l') {
+						tmp_st = S32;
 					}
 					else {
 						tmp_st = S1;
@@ -878,6 +905,114 @@ namespace leksanalyz {
 				case S19:
 					if (code[i] == 'e') {
 						tmp_st = S20;//состояние последнего символа ключ слова double
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S21:
+					if (code[i] == 'i') {
+						tmp_st = S22;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S22:
+					if (code[i] == 'z') {
+						tmp_st = S23;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S23:
+					if (code[i] == 'e') {
+						tmp_st = S24;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S24:
+					if (code[i] == 'o') {
+						tmp_st = S25;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S25:
+					if (code[i] == 'f') {//ключевое слово sizeof
+						tmp_st = S26;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S27:
+					if (code[i] == 'l') {
+						tmp_st = S28;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S28:
+					if (code[i] == 'o') {
+						tmp_st = S29;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S29:
+					if (code[i] == 'a') {
+						tmp_st = S30;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S30:
+					if (code[i] == 't') {//ключевое словов float
+						tmp_st = S31;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S32:
+					if (code[i] == 'a') {
+						tmp_st = S33;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S33:
+					if (code[i] == 's') {
+						tmp_st = S34;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S34:
+					if (code[i] == 's') {
+						tmp_st = S35;
 					}
 					else {
 						tmp_st = S1;
@@ -967,6 +1102,9 @@ namespace leksanalyz {
 					tmp_st = S8;//знак сравнения
 					word += code[i];
 					break;
+				case S9://строковая константа
+					word += code[i];
+					break;
 				default:
 					st = error;
 					word += code[i];
@@ -997,6 +1135,15 @@ namespace leksanalyz {
 				case S20://double
 					st = keyword;
 					break;
+				case S26://sizeof
+					st = keyword;
+					break;
+				case S31://float
+					st = keyword;
+					break;
+				case S35://class
+					st = keyword;
+					break;
 				case S5:
 					if (st != error) {//распознали константу без ошибок
 						st = constant;
@@ -1022,7 +1169,8 @@ namespace leksanalyz {
 					st = identifier;
 					break;
 				}
-
+				
+				//пишем в мапы
 				switch (st)
 				{
 				case separator:
@@ -1122,32 +1270,32 @@ namespace leksanalyz {
 		for (auto a : map_keywords) {
 			String^ leksema = gcnew String(a.first.c_str());
 			String^ code_leks = gcnew String(a.second.c_str());
-			this->keywords->Rows->Add(cnt_keywords++, leksema, code_leks);
+			this->keywords_table->Rows->Add(cnt_keywords++, leksema, code_leks);
 		}
 		for (auto a : map_identifiers) {
 			String^ identifier = gcnew String(a.first.c_str());
 			String^ code_identifier = gcnew String(a.second.c_str());
-			this->identifiers->Rows->Add(cnt_identifiers++, identifier, code_identifier);
+			this->identifiers_table->Rows->Add(cnt_identifiers++, identifier, code_identifier);
 		}
 		for (auto a : map_constants) {
 			String^ constanta = gcnew String(a.first.c_str());
 			String^ code_identifier = gcnew String(a.second.c_str());
-			this->constants->Rows->Add(cnt_consts++, constanta, code_identifier);
+			this->constants_table->Rows->Add(cnt_consts++, constanta, code_identifier);
 		}
 		for (auto a : map_op_sign) {
 			String^ sign = gcnew String(a.first.c_str());
 			String^ code_sign = gcnew String(a.second.c_str());
-			this->op_sign->Rows->Add(cnt_op_sign++, sign, code_sign);
+			this->operation_sign_table->Rows->Add(cnt_op_sign++, sign, code_sign);
 		}
 		for (auto a : map_comp_sign) {
 			String^ comp_sign = gcnew String(a.first.c_str());
 			String^ code_comp_sign = gcnew String(a.second.c_str());
-			this->comp_sign->Rows->Add(cnt_comp_sign++, comp_sign, code_comp_sign);
+			this->compare_sign_table->Rows->Add(cnt_comp_sign++, comp_sign, code_comp_sign);
 		}
 		for (auto a : map_separator_sign) {
 			String^ sep_sign = gcnew String(a.first.c_str());
 			String^ code_sep_sign = gcnew String(a.second.c_str());
-			this->separators->Rows->Add(cnt_sep_sign++, sep_sign, code_sep_sign);
+			this->separators_table->Rows->Add(cnt_sep_sign++, sep_sign, code_sep_sign);
 		}
 
 
@@ -1168,8 +1316,12 @@ namespace leksanalyz {
 		String^ code = source_code_file->ReadToEnd();
 		source_code_file->Close();
 
-		enum state { begin, keyword, identifier, constant, op_sign, comp_sign, separator, error } st;
-		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
+		enum state { begin, keyword, identifier, constant, str_constant, op_sign, comp_sign, separator, error } st;
+		enum temp_state {
+			S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,
+			S21, S22, S23, S24, S25, S26, S27, S28, S29, S30, S31, S32, S33, S34, S35
+		} tmp_st;
+		
 		st = begin; tmp_st = S0;
 
 		//определяем идентификаторы и константы
@@ -1193,6 +1345,12 @@ namespace leksanalyz {
 						break;
 					case 'd':
 						tmp_st = S15;
+						break;
+					case 's':
+						tmp_st = S21;
+						break;
+					case 'f':
+						tmp_st = S27;
 						break;
 					default:
 						tmp_st = S1;
@@ -1225,6 +1383,9 @@ namespace leksanalyz {
 				case S11:
 					if (code[i] == 'h') {
 						tmp_st = S12;
+					}
+					else if (code[i] == 'l') {
+						tmp_st = S32;
 					}
 					else {
 						tmp_st = S1;
@@ -1294,6 +1455,114 @@ namespace leksanalyz {
 					}
 					word += code[i];
 					break;
+				case S21:
+					if (code[i] == 'i') {
+						tmp_st = S22;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S22:
+					if (code[i] == 'z') {
+						tmp_st = S23;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S23:
+					if (code[i] == 'e') {
+						tmp_st = S24;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S24:
+					if (code[i] == 'o') {
+						tmp_st = S25;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S25:
+					if (code[i] == 'f') {//ключевое слово sizeof
+						tmp_st = S26;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S27:
+					if (code[i] == 'l') {
+						tmp_st = S28;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S28:
+					if (code[i] == 'o') {
+						tmp_st = S29;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S29:
+					if (code[i] == 'a') {
+						tmp_st = S30;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S30:
+					if (code[i] == 't') {//ключевое словов float
+						tmp_st = S31;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S32:
+					if (code[i] == 'a') {
+						tmp_st = S33;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S33:
+					if (code[i] == 's') {
+						tmp_st = S34;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S34:
+					if (code[i] == 's') {
+						tmp_st = S35;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
 				case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
 					word += code[i];
 					st = error;
@@ -1306,6 +1575,9 @@ namespace leksanalyz {
 				case S8:
 					word += code[i];
 					st = error;
+					break;
+				case S9://строковая костанта
+					word += code[i];
 					break;
 				default:
 					break;
@@ -1331,6 +1603,9 @@ namespace leksanalyz {
 					word += code[i];
 					st = error;
 					break;
+				case S9://строковая константа
+					word += code[i];
+					break;
 				default:
 					break;
 				}
@@ -1355,6 +1630,9 @@ namespace leksanalyz {
 						word += code[i];
 					}
 					break;
+				case S9://строковая константа
+					word += code[i];
+					break;
 				default://во всех случаях кроме после разделителя
 					st = error;
 					word += code[i];
@@ -1366,6 +1644,9 @@ namespace leksanalyz {
 				{
 				case S0:
 					tmp_st = S8;//знак сравнения
+					word += code[i];
+					break;
+				case S9://строковая константа
 					word += code[i];
 					break;
 				default:
@@ -1381,6 +1662,10 @@ namespace leksanalyz {
 				switch (tmp_st) {
 				case S0://распознали разделитель
 					st = separator;
+					if (code[i] == '"') {
+						std::cout << "first \"";//встретили первую кавычку
+						st = str_constant;
+					}
 					break;
 				case S1:
 					st = identifier;//распознали идентификатор
@@ -1392,6 +1677,15 @@ namespace leksanalyz {
 					st = keyword;
 					break;
 				case S20://double
+					st = keyword;
+					break;
+				case S26://sizeof
+					st = keyword;
+					break;
+				case S31://float
+					st = keyword;
+					break;
+				case S35://class
 					st = keyword;
 					break;
 				case S5:
@@ -1407,6 +1701,13 @@ namespace leksanalyz {
 					break;
 				case S8://знаки < or >
 					st = comp_sign;
+					break;
+				case S9:
+					if (st == str_constant && code[i] == '"') {//встретили вторую кавычку
+						std::cout << "second \"";
+						st = constant;
+					}
+
 					break;
 				default:
 					st = identifier;
@@ -1427,7 +1728,7 @@ namespace leksanalyz {
 					number_table = "1";//номер таблицы с ключевыми словами
 
 					//ищем совпадения в таблице с лексемой и записываем токен(номер таблицы + номер записи)
-					for each (DataGridViewRow ^ row in this->keywords->Rows) {
+					for each(DataGridViewRow ^ row in this->keywords_table->Rows) {
 
 						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
 
@@ -1447,7 +1748,7 @@ namespace leksanalyz {
 					//идентификаторы
 				case identifier:
 					number_table = "2";
-					for each (DataGridViewRow ^ row in this->identifiers->Rows) {
+					for each(DataGridViewRow ^ row in this->identifiers_table->Rows) {
 
 						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
 
@@ -1467,7 +1768,8 @@ namespace leksanalyz {
 					//константы
 				case constant:
 					number_table = "3";
-					for each (DataGridViewRow ^ row in this->constants->Rows) {
+
+					for each(DataGridViewRow ^ row in this->constants_table->Rows) {
 
 						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
 
@@ -1479,13 +1781,15 @@ namespace leksanalyz {
 							tokens->push_back(tok);
 						}
 					}
-					i--;//чтобы откатиться и распознать разделитель
+					if (code[i] != '"') {//чтобы не возвращался назад если это была закрывающая строку каавычка
+						i--;//чтобы откатиться и распознать разделитель
+					}
 					break;
 
 					//знаки операций
 				case op_sign:
 					number_table = "4";
-					for each (DataGridViewRow ^ row in this->op_sign->Rows) {
+					for each (DataGridViewRow ^ row in this->operation_sign_table->Rows) {
 
 						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
 
@@ -1504,7 +1808,7 @@ namespace leksanalyz {
 					//знаки сравнения
 				case comp_sign:
 					number_table = "5";
-					for each (DataGridViewRow ^ row in this->comp_sign->Rows) {
+					for each (DataGridViewRow ^ row in this->compare_sign_table->Rows) {
 
 						if (row->Cells[1]->Value->ToString()->Equals(leksema)) {
 
@@ -1526,7 +1830,7 @@ namespace leksanalyz {
 					//пишем сам разделитель в дескр. код
 					number_table = "6";
 					if (code[i] == ' ') {//эта чухня потому что в таблице пробелы и переносы записаны словами а не просто символом(иначе их не видно:(()
-						for each (DataGridViewRow ^ row in this->separators->Rows) {
+						for each (DataGridViewRow ^ row in this->separators_table->Rows) {
 							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString("space"))) {
 
 								std::cout << "FIND SEP_SIGN!\n";
@@ -1540,7 +1844,7 @@ namespace leksanalyz {
 	
 					}
 					else if (code[i] == '\n') {//эта чухня потому что в таблице пробелы и переносы записаны словами а не просто символом(иначе их не видно:(()
-						for each (DataGridViewRow ^ row in this->separators->Rows) {
+						for each (DataGridViewRow ^ row in this->separators_table->Rows) {
 							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString("\\n"))) {
 
 								std::cout << "FIND SEP_SIGN!\n";
@@ -1554,7 +1858,7 @@ namespace leksanalyz {
 
 					}
 					else {
-						for each (DataGridViewRow ^ row in this->separators->Rows) {
+						for each (DataGridViewRow ^ row in this->separators_table->Rows) {
 
 							if (row->Cells[1]->Value->ToString()->Equals(Convert::ToString(code[i]))) {
 
@@ -1570,6 +1874,15 @@ namespace leksanalyz {
 					}
 					break;
 
+				case str_constant:
+					if (tmp_st != S9) {
+						tmp_st = S9;//когда встретилась первая кавычка переходим в состояние S9
+					}
+					else {
+						word += code[i];//уже находимся в S9 просто пишем строку
+						break;
+					}
+					break;
 					//ошибки
 				case error:
 					std::cout << "ERRROR: " << word << '\n';
@@ -1578,9 +1891,11 @@ namespace leksanalyz {
 				}
 
 				//очищаем лексему и обнуляем состояния
-				word = "";
-				st = begin;
-				tmp_st = S0;
+				if (st != str_constant) {
+					word = "";
+					st = begin;
+					tmp_st = S0;
+				}
 			}
 
 
@@ -1596,12 +1911,12 @@ namespace leksanalyz {
 
 
 void leksanalyz::MyForm::clear_table() {
-	this->keywords->Rows->Clear();
-	this->identifiers->Rows->Clear();
-	this->constants->Rows->Clear();
-	this->op_sign->Rows->Clear();
-	this->comp_sign->Rows->Clear();
-	this->separators->Rows->Clear();
+	this->keywords_table->Rows->Clear();
+	this->identifiers_table->Rows->Clear();
+	this->constants_table->Rows->Clear();
+	this->operation_sign_table->Rows->Clear();
+	this->compare_sign_table->Rows->Clear();
+	this->separators_table->Rows->Clear();
 
 	delete tokens;
 }
