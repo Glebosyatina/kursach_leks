@@ -758,8 +758,9 @@ namespace leksanalyz {
 		String^ code = source_code_file->ReadToEnd();
 		source_code_file->Close();
 
-		enum state { begin, identifier, constant, str_constant, op_sign, comp_sign, error } st;
-		st = begin;
+		enum state { begin, keyword, identifier, constant, op_sign, comp_sign, separator, error } st;
+		enum temp_state { S0, S1, S2, S3, S4, S5, S6, S7, S8, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20 } tmp_st;
+		st = begin; tmp_st = S0;
 
 		//определяем идентификаторы и константы
 		std::string word; //сюда пишем обработанную лексему
@@ -769,218 +770,313 @@ namespace leksanalyz {
 		for (int i = 0; i < code->Length; i++) {
 
 			if (Char::IsLetter(code[i]) || code[i] == '_') {//обрабатываем символ
-				switch (st)
+				switch (tmp_st)
 				{
-				case begin:
-				case identifier:
+				case S0:
+					tmp_st = S1;   //состояние идентификатора
+					switch (code[i]) {//первые буквы ключевых слов
+					case 'i':
+						tmp_st = S2;
+						break;
+					case 'c':
+						tmp_st = S11;
+						break;
+					case 'd':
+						tmp_st = S15;
+						break;
+					default:
+						tmp_st = S1;
+						break;
+					}
 					word += code[i];
-					st = identifier;
 					break;
-				case constant:
-					word += code[i];
-					st = error;
-					break;
-				case str_constant:
+				case S1:	 //состояние идентификатора
 					word += code[i];
 					break;
-				case op_sign:
+				case S2:
+					if (code[i] == 'n') {
+						tmp_st = S3;
+					}
+					else {
+						tmp_st = S1;
+					}
 					word += code[i];
-					st = identifier;
 					break;
-				case error:
+				case S3:
+					if (code[i] == 't') {
+						tmp_st = S4;//состояние последнего символа ключ слова int
+					}
+					else {
+						tmp_st = S1;
+					}
 					word += code[i];
 					break;
 
+				case S11:
+					if (code[i] == 'h') {
+						tmp_st = S12;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S12:
+					if (code[i] == 'a') {
+						tmp_st = S13;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S13:
+					if (code[i] == 'r') {
+						tmp_st = S14;//состояние последнего символа ключ слова char
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S15:
+					if (code[i] == 'o') {
+						tmp_st = S16;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S16:
+					if (code[i] == 'u') {
+						tmp_st = S17;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S17:
+					if (code[i] == 'b') {
+						tmp_st = S18;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S18:
+					if (code[i] == 'l') {
+						tmp_st = S19;
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S19:
+					if (code[i] == 'e') {
+						tmp_st = S20;//состояние последнего символа ключ слова double
+					}
+					else {
+						tmp_st = S1;
+					}
+					word += code[i];
+					break;
+				case S5://были в состоянии числовой константы и пришла буква - то есть переходим в ошибку
+					word += code[i];
+					st = error;
+					break;
+				case S6://были на знаке операции и пришла буква - непорядок
+					word += code[i];
+					st = error;
+					break;
+				case S7://знаки сравнения а пришла буква - непорядок, пишем в ошибку
+				case S8:
+					word += code[i];
+					st = error;
+					break;
 				default:
 					break;
 				}
 
 			}
 			else if (Char::IsDigit(code[i])) {//обрабатываем цифру
-				switch (st) {
-				case begin:
-				case constant:
-					word += code[i];
-					st = constant;
-					break;
-
-				case identifier:
-					word += code[i];
-					break;
-
-				case op_sign:
-					word += code[i];
-					break;
-
-				case error:
-					word += code[i];
-					break;
-
-				default:
-					break;
-				}
-			}
-			else if (code[i] == '<' || code[i] == '>' || (code[i] == '=' && code[i + 1] == '=')) {//обработка знаков сравнения
-				switch (st)
+				switch (tmp_st)
 				{
-				case begin:
-					word += code[i];
-					st = comp_sign;
-					break;
-				case identifier:
+				case S0://начало
+					tmp_st = S5;
 					word += code[i];
 					break;
-				case constant:
+				case S5://константа
+					word += code[i];
+					break;
+				case S6://знак операции - пусть вводят разделитель
 					word += code[i];
 					st = error;
 					break;
-				case op_sign:
+				case S7:
+				case S8://знак сравения - нужен разделитель
 					word += code[i];
 					st = error;
-					break;
-				case comp_sign:
-					word += code[i];
-					break;
-				case error:
-					word += code[i];
 					break;
 				default:
 					break;
 				}
-
 			}
 			else if (code[i] == '=' || code[i] == '+' || code[i] == '-' || code[i] == '/' || code[i] == '*') {//обработка знаков операций
-				switch (st) {
-				case begin:
-				case op_sign:
+				switch (tmp_st)
+				{
+				case S0:
+					tmp_st = S6;//знак операции
 					word += code[i];
-					st = op_sign;
 					break;
-				case identifier:
-					word += code[i];
-					st = identifier;
+				case S6://второй раз знак = значит это сравнение - S7
+					if (code[i] == '=') {
+						tmp_st = S7;
+						word += code[i];
+					}
 					break;
-				case constant:
-					word += code[i];
+				case S8://приходит = после < или >
+					if (code[i] == '=') {
+						tmp_st = S7;
+						word += code[i];
+					}
+					break;
+				default://во всех случаях кроме после разделителя
 					st = error;
-					break;
-				case comp_sign:
 					word += code[i];
-					break;
-				case error:
-					word += code[i];
-					break;
-
-				default:
 					break;
 				}
 
+			}
+			else if (code[i] == '<' || code[i] == '>') {
+				switch (tmp_st)
+				{
+				case S0:
+					tmp_st = S8;//знак сравнения
+					word += code[i];
+					break;
+				default:
+					st = error;
+					word += code[i];
+					break;
+				}
 			}
 			else if (code[i] == ' ' || code[i] == '\n' || code[i] == ';' || code[i] == ',' || code[i] == '"' || code[i] == '(' || code[i] == ')' || code[i] == '{' || code[i] == '}') {// пришел разделитель, обрабатываем слово
 
-				//запись в мапу разделителей
-				if (code[i] == ' ') {
-					std::cout << "separator( space ): " << code[i];
-					std::string c_str = "space";
-					map_separator_sign[c_str] = "space";
+				
+				//определяем что за лексема
+				switch (tmp_st) {
+				case S0://распознали разделитель
+					st = separator;
+					break;
+				case S1:
+					st = identifier;//распознали идентификатор
+					break;
+				case S4://int
+					st = keyword;
+					break;
+				case S14://char
+					st = keyword;
+					break;
+				case S20://double
+					st = keyword;
+					break;
+				case S5:
+					if (st != error) {//распознали константу без ошибок
+						st = constant;
+					}
+					break;
+				case S6:
+					st = op_sign;//знак операции
+					break;
+				case S7://знак == <= >=
+					st = comp_sign;
+					break;
+				case S8://знаки < or >
+					st = comp_sign;
+					break;
+				default:
+					st = identifier;
+					break;
 				}
-				else if (code[i] == '\n') {
-					std::cout << "separator(\\n): " << code[i];
-					std::string c_str = "\\n";
-					map_separator_sign[c_str] = "\\n";
-				}
-				else {
-					std::cout << "separator: " << code[i];
-					std::string c_str; c_str.push_back(code[i]);
-					map_separator_sign[c_str] = code[i];
-				}
-
-
 
 				switch (st)
 				{
-				case begin:
-					if (code[i] == '"') {
-						st = str_constant;
+				case separator:
+					//запись в мапу разделителей
+					if (code[i] == ' ') {
+						std::cout << "separator( space ): " << code[i];
+						std::string c_str = "space";
+						map_separator_sign[c_str] = "space";
 					}
+					else if (code[i] == '\n') {
+						std::cout << "separator(\\n): " << code[i];
+						std::string c_str = "\\n";
+						map_separator_sign[c_str] = "\\n";
+					}
+					else {
+						std::cout << "separator: " << code[i];
+						std::string c_str; c_str.push_back(code[i]);
+						map_separator_sign[c_str] = code[i];
+					}
+					break;
+
+					//ключевое слово
+				case keyword:
+					std::cout << "keyword: " << word << '\n';
+					map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
+					i--;//чтобы откатиться и распознать разделитель
 					break;
 
 					//состояние идентификатора - определяем ключевое слово или просто идентификатор
 				case identifier:
-
-
-					//проверка keywords
-					if (word == "auto" || word == "break" || word == "case" || word == "char" || word == "const" || word == "auto"\
-						|| word == "continue" || word == "default" || word == "do" || word == "double" || word == "else" || word == "enum"\
-						|| word == "extern" || word == "float" || word == "for" || word == "goto" || word == "if" || word == "int"\
-						|| word == "long" || word == "register" || word == "return" || word == "short" || word == "signed" \
-						|| word == "sizeof" || word == "static" || word == "struct" || word == "switch" || word == "typedef"\
-						|| word == "union" || word == "unsigned" || word == "void" || word == "volatile" || word == "while" || word == "string") {
-						st = begin;
-						std::cout << "keyword: " << word << '\n';
-						map_keywords[word] = word;//пишем ключевое слово и его код(оно же) в мапу ключевых слов
-						break;
-					}
-
-
-
-					st = begin;
 					std::cout << "identifier: " << word << '\n';
-
 					//кидаем в мапу с идентификаторами
 					map_identifiers[word] = "id";
-
-
+					i--;//чтобы откатиться и распознать разделитель
 					break;
 
 					//состояние константы - проверяем без ошибок ли написано число
 				case constant:
-					st = begin;
 					std::cout << "constanta: " << word << '\n';
 					//запись в мапу констант
 					map_constants[word] = "number";
-
-					break;
-
-					//строковая константа
-				case str_constant:
-					st = begin;
-					std::cout << "str_const: " << word << '\n';
-					map_constants[word] = "string";
+					i--;//чтобы откатиться и распознать разделитель
 					break;
 
 
 					//состояние знака операции
 				case op_sign:
-					st = begin;
 					std::cout << "op_sign: " << word << '\n';
 					//запись в мапу map_op_sign
 					map_op_sign[word] = word;
-
+					i--;//чтобы откатиться и распознать разделитель
 					break;
 
 					//Знак сравнения
 				case comp_sign:
-					st = begin;
 					std::cout << "comp_sign: " << word << '\n';
 					//запись в мапу map_comp_sign
 					map_comp_sign[word] = word;
-
+					i--;//чтобы откатиться и распознать разделитель
 					break;
 
 					//состояние ошибки - выводим идентификатор в котором допущена ошибка
 				case error:
 					std::cout << "Error: " << word << '\n';
-					st = begin;
-
 					break;
 
 				default:
-					st = begin;
 					break;
 				}
-				word = "";//очищаем для следующего слова
 
+
+				word = "";//очищаем для следующего слова
+				st = begin;
+				tmp_st = S0;
 			}
 
 		}
@@ -1021,6 +1117,7 @@ namespace leksanalyz {
 
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////
 
 	public: std::vector<my_token::token>* tokens;
 
