@@ -124,6 +124,10 @@ namespace leksanalyz {
 	private: System::Windows::Forms::Label^ label9;
 	private: System::Windows::Forms::TextBox^ descriptive_code;
 	private: System::Windows::Forms::Button^ make_descr_code;
+	private: System::Windows::Forms::TextBox^ PseudoCode;
+	private: System::Windows::Forms::Label^ label10;
+	private: System::Windows::Forms::TextBox^ Errors;
+	private: System::Windows::Forms::Label^ label11;
 
 
 
@@ -186,6 +190,10 @@ namespace leksanalyz {
 			this->label9 = (gcnew System::Windows::Forms::Label());
 			this->descriptive_code = (gcnew System::Windows::Forms::TextBox());
 			this->make_descr_code = (gcnew System::Windows::Forms::Button());
+			this->PseudoCode = (gcnew System::Windows::Forms::TextBox());
+			this->label10 = (gcnew System::Windows::Forms::Label());
+			this->Errors = (gcnew System::Windows::Forms::TextBox());
+			this->label11 = (gcnew System::Windows::Forms::Label());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->keywords_table))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->identifiers_table))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->constants_table))->BeginInit();
@@ -615,11 +623,55 @@ namespace leksanalyz {
 			this->make_descr_code->UseVisualStyleBackColor = true;
 			this->make_descr_code->Click += gcnew System::EventHandler(this, &MyForm::make_descr_code_Click);
 			// 
+			// PseudoCode
+			// 
+			this->PseudoCode->Location = System::Drawing::Point(761, 311);
+			this->PseudoCode->Name = L"PseudoCode";
+			this->PseudoCode->Size = System::Drawing::Size(462, 22);
+			this->PseudoCode->TabIndex = 22;
+			// 
+			// label10
+			// 
+			this->label10->AutoSize = true;
+			this->label10->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label10->Location = System::Drawing::Point(932, 274);
+			this->label10->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label10->Name = L"label10";
+			this->label10->Size = System::Drawing::Size(127, 25);
+			this->label10->TabIndex = 23;
+			this->label10->Text = L"Pseudo code";
+			// 
+			// Errors
+			// 
+			this->Errors->Location = System::Drawing::Point(1246, 48);
+			this->Errors->Margin = System::Windows::Forms::Padding(4);
+			this->Errors->Multiline = true;
+			this->Errors->Name = L"Errors";
+			this->Errors->Size = System::Drawing::Size(259, 369);
+			this->Errors->TabIndex = 24;
+			// 
+			// label11
+			// 
+			this->label11->AutoSize = true;
+			this->label11->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->label11->Location = System::Drawing::Point(1345, 19);
+			this->label11->Margin = System::Windows::Forms::Padding(4, 0, 4, 0);
+			this->label11->Name = L"label11";
+			this->label11->Size = System::Drawing::Size(64, 25);
+			this->label11->TabIndex = 25;
+			this->label11->Text = L"Errors";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(1245, 898);
+			this->ClientSize = System::Drawing::Size(1518, 898);
+			this->Controls->Add(this->label11);
+			this->Controls->Add(this->Errors);
+			this->Controls->Add(this->label10);
+			this->Controls->Add(this->PseudoCode);
 			this->Controls->Add(this->make_descr_code);
 			this->Controls->Add(this->descriptive_code);
 			this->Controls->Add(this->label9);
@@ -747,6 +799,11 @@ namespace leksanalyz {
 
 
 	}
+		   /////////////////////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////////////////////
+   /////////////////////////////////////////////////////////////////////////////////////
 		   /////////////////////////////////////////////////////////////////////////////////////////
 		   //лексический анализ
 
@@ -774,6 +831,7 @@ namespace leksanalyz {
 		
 		enum state { begin, keyword, identifier, constant, str_constant, op_sign, comp_sign, separator, error } st;
 		enum temp_state {
+			SE1, SE2, SE3,
 			S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,
 			S21, S22, S23, S24, S25, S26, S27, S28, S29, S30, S31, S32, S33, S34, S35
 		} tmp_st;
@@ -1020,6 +1078,19 @@ namespace leksanalyz {
 					word += code[i];
 					break;
 				case S5://были в состо€нии числовой константы и пришла буква - то есть переходим в ошибку
+				//состо€ние числовой константы и пришло ≈ (10≈+2)
+					if (code[i] == 'E') {
+						word += code[i];
+						tmp_st = SE1;
+					}
+					else {
+						word += code[i];
+						st = error;
+					}
+					break;
+				case SE1:
+				case SE2:
+				case SE3:
 					word += code[i];
 					st = error;
 					break;
@@ -1040,6 +1111,7 @@ namespace leksanalyz {
 				}
 
 			}
+
 			else if (Char::IsDigit(code[i])) {//обрабатываем цифру
 				switch (tmp_st)
 				{
@@ -1062,10 +1134,17 @@ namespace leksanalyz {
 				case S9://строкова€ костанта
 					word += code[i];
 					break;
+
+				case SE2:
+				case SE3:
+					word += code[i];
+					tmp_st = SE3;
+					break;
 				default:
 					break;
 				}
 			}
+
 			else if (code[i] == '=' || code[i] == '+' || code[i] == '-' || code[i] == '/' || code[i] == '*') {//обработка знаков операций
 				switch (tmp_st)
 				{
@@ -1087,6 +1166,17 @@ namespace leksanalyz {
 					break;
 				case S9://строкова€ костанта
 					word += code[i];
+					break;
+
+				case SE1://10E+2 эспонинцеальна€ форма
+					if (code[i] == '+' || code[i] == '-') {
+						word += code[i];
+						tmp_st = SE2;
+					}
+					else {
+						st = error;	
+						word += code[i];
+					}
 					break;
 				default://во всех случа€х кроме после разделител€
 					st = error;
@@ -1163,7 +1253,9 @@ namespace leksanalyz {
 						std::cout << "second \"";
 						st = constant;
 					}
-
+					break;
+				case SE3:
+					st = constant;
 					break;
 				default:
 					st = identifier;
@@ -1303,6 +1395,10 @@ namespace leksanalyz {
 	}
 
 	/////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////
 
 	public: std::vector<my_token::token>* tokens;
 
@@ -1318,6 +1414,7 @@ namespace leksanalyz {
 
 		enum state { begin, keyword, identifier, constant, str_constant, op_sign, comp_sign, separator, error } st;
 		enum temp_state {
+			SE1, SE2, SE3,
 			S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, S11, S12, S13, S14, S15, S16, S17, S18, S19, S20,
 			S21, S22, S23, S24, S25, S26, S27, S28, S29, S30, S31, S32, S33, S34, S35
 		} tmp_st;
@@ -1564,6 +1661,19 @@ namespace leksanalyz {
 					word += code[i];
 					break;
 				case S5://были в состо€нии числовой константы и пришла буква - то есть переходим в ошибку
+					//состо€ние числовой константы и пришло ≈ (10≈+2)
+					if (code[i] == 'E') {
+						word += code[i];
+						tmp_st = SE1;
+					}
+					else {
+						word += code[i];
+						st = error;
+					}
+					break;
+				case SE1:
+				case SE2:
+				case SE3:
 					word += code[i];
 					st = error;
 					break;
@@ -1606,12 +1716,18 @@ namespace leksanalyz {
 				case S9://строкова€ константа
 					word += code[i];
 					break;
+				case SE2:
+				case SE3:
+					word += code[i];
+					tmp_st = SE3;
+					break;
 				default:
 					break;
 				}
 			}
 			//пришел знак операции
 			if (code[i] == '+' || code[i] == '-' || code[i] == '*' || code[i] == '/' || code[i] == '=') {
+
 				switch (tmp_st)
 				{
 				case S0:
@@ -1630,15 +1746,28 @@ namespace leksanalyz {
 						word += code[i];
 					}
 					break;
-				case S9://строкова€ константа
+				case S9://строкова€ костанта
 					word += code[i];
+					break;
+
+				case SE1://10E+2 эспонинцеальна€ форма
+					if (code[i] == '+' || code[i] == '-') {
+						word += code[i];
+						tmp_st = SE2;
+					}
+					else {
+						st = error;
+						word += code[i];
+					}
 					break;
 				default://во всех случа€х кроме после разделител€
 					st = error;
 					word += code[i];
 					break;
 				}
+
 			}
+
 			if (code[i] == '<' || code[i] == '>') {
 				switch (tmp_st)
 				{
@@ -1707,7 +1836,9 @@ namespace leksanalyz {
 						std::cout << "second \"";
 						st = constant;
 					}
-
+					break;
+				case SE3:
+					st = constant;
 					break;
 				default:
 					st = identifier;
